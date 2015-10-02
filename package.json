@@ -1,0 +1,33 @@
+{
+  "name": "tabletable",
+  "version": "0.0.1",
+  "description": "A simple, but extremely flexible table component written in ReactJS.",
+  "main": "dist/entry.js",
+  "scripts": {
+    "build": "$(npm bin)/babel src/ -d dist/",
+    "watch": "$(npm bin)/babel src/ -d dist/ --watch",
+    "prepublish": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZeroarcSoftware/tabletable.git"
+  },
+  "keywords": [
+    "Reactjs",
+    "Table"
+  ],
+  "author": "Zeroarc Software",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ZeroarcSoftware/tabletable/issues"
+  },
+  "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
+  "devDependencies": {
+    "babel": "^5.8.23",
+  },
+  "dependencies": {
+    "immutable": "^3.7.5",
+    "react": "^0.13.3"
+  }
+}
