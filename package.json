@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
   "devDependencies": {
-    "babel": "^5.8.23",
+    "babel": "^5.8.23"
   },
   "dependencies": {
     "immutable": "^3.7.5",
