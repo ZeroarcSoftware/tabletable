@@ -25,6 +25,7 @@ let TabletableContainer = React.createClass({
     // Optional
     pager: React.PropTypes.func,
     onFilterAction: React.PropTypes.func,
+    filterValue: React.PropTypes.string,
   },
 
   getDefaultProps() {
@@ -39,7 +40,6 @@ let TabletableContainer = React.createClass({
   getInitialState() {
     return {
       currentPage: 1,
-      filterValue: '',
     };
   },
 
@@ -107,7 +107,7 @@ let TabletableContainer = React.createClass({
     });
 
     let clearClasses = ClassNames('btn', 'btn-white', 'btn-xs', {
-      hidden: this.state.filterValue.length === 0
+      hidden: this.props.filterValue.length === 0
     });
 
     return (
@@ -116,7 +116,7 @@ let TabletableContainer = React.createClass({
           <div className={filterClasses}>
             <div className='input-group col-xs-4 col-xs-offset-8 room-bottom'>
               <button className={clearClasses} style={{position: 'absolute', right: '6px', top: '6px', zIndex: 3}} onClick={this.handleClearFilterClick}><i className='fa fa-times'></i> Clear</button>
-              <input type='text' className='form-control' placeholder='Filter outputs' value={this.state.filterValue} onChange={this.handleFilterChange} />
+              <input type='text' className='form-control' placeholder='Filter outputs' value={this.props.filterValue} onChange={this.handleFilterChange} />
             </div>
           </div>
         </div>
@@ -148,13 +148,11 @@ let TabletableContainer = React.createClass({
   // Update local state and call external onFilterAction if defined
   handleFilterChange(e) {
     e.stopPropagation();
-    this.setState({filterValue: e.target.value});
     this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   },
 
   handleClearFilterClick(e) {
     e.stopPropagation();
-    this.setState({filterValue: ''});
     this.props.onFilterAction && this.props.onFilterAction('');
   },
 });
