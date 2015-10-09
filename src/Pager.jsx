@@ -4,39 +4,28 @@
 */
 
 // External
-let React = require('react/addons');
-let PureRenderMixin = React.addons.PureRenderMixin;
+let React = require('react');
+let ReactShallowCompare = require('react-addons-shallow-compare');
 let ClassNames = require('classnames');
+let Autobind = require('autobind-decorator');
 
-
-let TabletablePager = React.createClass({
-  mixins: [PureRenderMixin],
-
-  propTypes: {
-    displayPages: React.PropTypes.number.isRequired,
-    maxPage: React.PropTypes.number.isRequired,
-    currentPage: React.PropTypes.number.isRequired,
-    onPageChange: React.PropTypes.func.isRequired,
-  },
-
-  getDefaultProps() {
-    return {
-      maxPage: 1,
-      currentPage: 1,
-    }
-  },
+@Autobind
+export default class TabletablePager extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return ReactShallowCompare(this, nextProps, nextState);
+  }
 
   render() {
     let options = [];
 
-    let startIndex = Math.max(this.props.currentPage - 5, 1);
-    let endIndex = Math.min(startIndex + 9, this.props.maxPage);
+    let startIndex = Math.max(this.props.currentPage - Math.floor(this.props.displayPages / 2), 1);
+    let endIndex = Math.min(startIndex + (this.props.displayPages - 1), this.props.maxPage);
 
-    if (this.props.maxPage >= 10 && (endIndex - startIndex) <= 10) {
-      startIndex = endIndex - 9;
+    if (this.props.maxPage >= this.props.displayPages && (endIndex - startIndex) <= this.props.displayPages) {
+      startIndex = endIndex - (this.props.displayPages - 1);
     }
 
-    for(let i = startIndex; i <= endIndex ; i++){
+    for(let i = startIndex; i <= endIndex; i++){
       let thisButtonClasses = ClassNames('btn', 'btn-white', 'btn-sm', {
         'label-success': this.props.currentPage === i
       });
@@ -44,7 +33,7 @@ let TabletablePager = React.createClass({
     }
 
     return (
-      <div className='btn-toolbar text-center col-xs-12' role='toolbar'>
+      <div className='btn-toolbar text-center room-top room-bottom' role='toolbar' style={{marginBottom: '0px'}} >
         <div className='btn-group pull-left' role='group'>
           <button className='btn btn-white btn-sm' onClick={this.firstPageChange}><i className='fa fa-step-backward'></i> First</button>
         </div>
@@ -62,36 +51,50 @@ let TabletablePager = React.createClass({
         </div>
       </div>
     )
-  },
+  }
+
+  //
+  // Custom methods
+  //
 
   pageChange(e) {
     e.stopPropagation();
     this.props.onPageChange(parseInt(e.target.getAttribute('data-value')));
-  },
+  }
 
   previousPageChange(e) {
     e.stopPropagation();
     if (this.props.currentPage > 1) {
       this.props.onPageChange(this.props.currentPage - 1);
     }
-  },
+  }
 
   nextPageChange(e) {
     e.stopPropagation();
     if (this.props.currentPage < this.props.maxPage) {
       this.props.onPageChange(this.props.currentPage + 1);
     }
-  },
+  }
 
   firstPageChange(e) {
     e.stopPropagation();
     this.props.onPageChange(1);
-  },
+  }
 
   lastPageChange(e) {
     e.stopPropagation();
     this.props.onPageChange(this.props.maxPage);
-  },
-});
+  }
+}
 
-module.exports = TabletablePager;
+TabletablePager.defaultProps = {
+  maxPage: 1,
+  currentPage: 1,
+};
+
+TabletablePager.propTypes = {
+  displayPages: React.PropTypes.number.isRequired,
+  maxPage: React.PropTypes.number.isRequired,
+  currentPage: React.PropTypes.number.isRequired,
+  onPageChange: React.PropTypes.func.isRequired,
+};

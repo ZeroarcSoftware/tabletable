@@ -6,42 +6,29 @@
 'use strict';
 
 // External
-let React = require('react/addons');
+let React = require('react');
+let ReactShallowCompare = require('react-addons-shallow-compare');
 let Immutable = require('immutable');
 let ClassNames = require('classnames');
+let Autobind = require('autobind-decorator');
 
 // Local
 let Pager = require('./Pager');
 
 
-let TabletableContainer = React.createClass({
-  propTypes: {
-    data: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    columns: React.PropTypes.object.isRequired,
-    rowsPerPage: React.PropTypes.number.isRequired,
-    pagerSize: React.PropTypes.number.isRequired,
-    showPager: React.PropTypes.bool.isRequired,
-    showFilter: React.PropTypes.bool.isRequired,
-    // Optional
-    pager: React.PropTypes.func,
-    onFilterAction: React.PropTypes.func,
-    filterValue: React.PropTypes.string,
-  },
+@Autobind
+export default class TabletableContainer extends React.Component {
+  constructor(props, context) {
+    super(props, context);
 
-  getDefaultProps() {
-    return {
-      rowsPerPage: 5,
-      pagerSize: 10,
-      showPager: true,
-      showFilter: true,
-    };
-  },
-
-  getInitialState() {
-    return {
+    this.state = {
       currentPage: 1,
     };
-  },
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return ReactShallowCompare(this, nextProps, nextState);
+  }
 
   render() {
     let headerComponents = [];
@@ -50,7 +37,7 @@ let TabletableContainer = React.createClass({
         // If visible is false, hide the column. If visible is not defined, default to showing column
       if (typeof this.props.columns[k].visible === 'undefined' || this.props.columns[k].visible) {
         headerComponents.push(
-          <th key={`th-${k}`}>{this.props.columns[k].display || k}</th>
+          <th key={`th-${k}`} className={this.props.columns[k].cssClass}>{this.props.columns[k].display || k}</th>
         );
       }
     });
@@ -71,7 +58,7 @@ let TabletableContainer = React.createClass({
       });
 
       return (
-        <tr key={index} className='row'>
+        <tr key={index}>
           {rowComponents}
         </tr>
       );
@@ -112,49 +99,64 @@ let TabletableContainer = React.createClass({
 
     return (
       <div className='tabletable'>
-        <div className='row'>
           <div className={filterClasses}>
             <div className='input-group col-xs-4 col-xs-offset-8 room-bottom'>
               <button className={clearClasses} style={{position: 'absolute', right: '6px', top: '6px', zIndex: 3}} onClick={this.handleClearFilterClick}><i className='fa fa-times'></i> Clear</button>
               <input type='text' className='form-control' placeholder='Filter outputs' value={this.props.filterValue} onChange={this.handleFilterChange} />
             </div>
           </div>
-        </div>
-        <div className='row'>
-          <table className='table table-striped table-bordered table-hover col-xs-12'>
+          {pager}
+          <table className='table table-striped table-bordered table-hover'>
             <thead>
-              <tr className={'row'}>
+              <tr>
                 {headerComponents}
               </tr>
             </thead>
             <tbody>
-              {rows}
+              {rows.toList()}
             </tbody>
           </table>
-        </div>
-        <div className='row'>
           {pager}
-        </div>
       </div>
     );
-  },
+  }
 
+  //
   // Custom methods
+  //
 
   handlePageChange(pageNumber) {
     this.setState({currentPage: pageNumber});
-  },
+  }
 
   // Update local state and call external onFilterAction if defined
   handleFilterChange(e) {
     e.stopPropagation();
     this.props.onFilterAction && this.props.onFilterAction(e.target.value);
-  },
+  }
 
   handleClearFilterClick(e) {
     e.stopPropagation();
     this.props.onFilterAction && this.props.onFilterAction('');
-  },
-});
+  }
+}
 
-module.exports = TabletableContainer;
+TabletableContainer.defaultProps = {
+  rowsPerPage: 5,
+  pagerSize: 10,
+  showPager: true,
+  showFilter: true,
+};
+
+TabletableContainer.propTypes = {
+  data: React.PropTypes.instanceOf(Immutable.Seq).isRequired,
+  columns: React.PropTypes.object.isRequired,
+  rowsPerPage: React.PropTypes.number.isRequired,
+  pagerSize: React.PropTypes.number.isRequired,
+  showPager: React.PropTypes.bool.isRequired,
+  showFilter: React.PropTypes.bool.isRequired,
+  // Optional
+  pager: React.PropTypes.func,
+  onFilterAction: React.PropTypes.func,
+  filterValue: React.PropTypes.string,
+};

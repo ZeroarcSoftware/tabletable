@@ -5,7 +5,7 @@
 'use strict';
 
 // Local
-var Container = require('./Container');
+let Container = require('./Container');
 
 console.log('Q: What is better than one table? A: Two tables.');
 

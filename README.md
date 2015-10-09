@@ -18,7 +18,7 @@ If you are interested in helping with any of this, I would gladly take pull requ
 To use tabletable:
 - Install the component through NPM
 - Require it
-- Pass it an Immutablejs iterable of rows, a column definition object, and an optional filter handler.
+- Pass it an Immutablejs Sequence of rows, a column definition object, and an optional filter handler.
 
 Example:
 
