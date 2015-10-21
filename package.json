@@ -1,6 +1,6 @@
 {
   "name": "tabletable",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "A simple, but extremely flexible table component written in ReactJS.",
   "main": "dist/entry.js",
   "scripts": {
