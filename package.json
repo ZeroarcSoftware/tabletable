@@ -1,6 +1,6 @@
 {
   "name": "tabletable",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple, but extremely flexible table component written in ReactJS.",
   "main": "dist/entry.js",
   "scripts": {
@@ -24,10 +24,11 @@
   },
   "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
   "devDependencies": {
-    "autobind-decorator": "^1.3.2",
     "babel": "^5.8.23"
   },
   "dependencies": {
+    "autobind-decorator": "^1.3.2",
+    "classnames": "^2.2.0",
     "immutable": "^3.7.5",
     "react": "^0.14.0",
     "react-addons-shallow-compare": "^0.14.0"
