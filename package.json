@@ -1,7 +1,7 @@
 {
   "name": "tabletable",
-  "version": "0.1.1",
-  "description": "A simple, but extremely flexible table component written in ReactJS.",
+  "version": "0.2.0",
+  "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/entry.js",
   "scripts": {
     "build": "$(npm bin)/babel --optional es7.decorators src/ -d dist/",
@@ -24,13 +24,13 @@
   },
   "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
   "devDependencies": {
-    "babel": "^5.8.23"
+    "babel": "^5.8.29"
   },
   "dependencies": {
     "autobind-decorator": "^1.3.2",
     "classnames": "^2.2.0",
     "immutable": "^3.7.5",
-    "react": "^0.14.0",
-    "react-addons-shallow-compare": "^0.14.0"
+    "react": "^0.14.1",
+    "react-addons-shallow-compare": "^0.14.1"
   }
 }

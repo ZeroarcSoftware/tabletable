@@ -1,10 +1,9 @@
 # tabletable
 
-## Reactjs Simple Table
+## React Simple Table
+tabletable is a simple table component written purely in React. It is the result of my frustrations with Griddle and other React tables that are overly prescriptive in how they must be used and make things very difficult to customize and integrate into complex applications.
 
-tabletable is a simple table component written purely in ReactJS. It is the result of my frustrations with Griddle and other React tables that are overly prescriptive in how they must be used and make things very difficult to customize and integrate into complex applications.
-
-tabletable takes any sort of data structure (provided it is Immutable) and allows you to define your columns' markup and data projections as you like. It is also server-side rendering friendly.
+tabletable takes any sort of data structure and allows you to define your columns' markup and data projections as you like. It is also server-side rendering friendly.
 
 tabletable has some limitations that I hope to address in the future:
 - It requires an Immutablejs data structure for its data
@@ -14,29 +13,65 @@ tabletable has some limitations that I hope to address in the future:
 If you are interested in helping with any of this, I would gladly take pull requests.
 
 ## Using it
-
 To use tabletable:
 - Install the component through NPM
 - Require it
 - Pass it an Immutablejs Sequence of rows, a column definition object, and an optional filter handler.
 
-Example:
+### Component props
+tabletable has the following component props:
 
+#### Required
+**data [Immutable.Seq]** - structured source data.
+
+**columns [object]** - column definition object.
+
+#### Optional
+**rowsPerPage [number]** - number of rows to display per page.
+
+**pagerSize [number]** - number pages to display in pager.
+
+**showPager [bool]** - show/hide the pager.
+
+**showFilter [bool]** - show/hide the filter input.
+
+**pager [React.Component]** - pager component to use in place of default pager.
+
+**onFilterAction [func(filterValue: string)]** - callback function for responding to filter input.
+
+**filterValue [string]** - text to display in search filter.
+
+### Column definition options
+Column definitions are a flexible way to get some fairly complex behaviors into the table while also allowing the *shape* of the data to be however you prefer. Each column defines a function that receives the row data and index as arguments and returns a React component that displays the content. This means that you can drive complex behaviors from the state and props of the parent component. The properties available in the definition objects are:
+
+#### Required
+**data [func(row: object, index: number)]** - a function that transforms the row data into a React component to be displayed.
+
+#### Optional
+**display [string]** - Header value for column. If not defined, the property name for the column object will be used instead.
+
+**headerCssClass [string]** - CSS class(es) to use for header column (th) element.
+
+**rowCssClass [string]** - CSS class(es) to use for row column (td) element.
+
+**visible [bool]** - show/hide the column.
+
+### Contrived Example
     let columnDefs = {
       index: {
           display: 'Index',
-          cssClass: 'col-sm-1',
+          headerCssClass: 'col-sm-1',
           visible: true,
           data: (row,index) => <div>{index}</div>,
       },
       name: {
           display: 'Name',
-          cssClass: 'col-sm-10',
+          headerCssClass: 'col-sm-10',
           data: row => <div>{row.get('name')}</div>,
       },
       timestamp: {
           display: 'Created',
-          cssClass: 'col-sm-1',
+          headerCssClass: 'col-sm-1',
           data: row => <div>{row.get('timestamp')}</div>,
       },
     };
@@ -77,7 +112,6 @@ You can also define a custom pager that will be substituted for the default page
 The custom pager needs to behave similarly and accept the same props as the default pager. I suggest you copy src/Pager.jsx and modify to suit your needs.
 
 ## Contributing
-
 First, setup your local environment:
 
     git clone git@github.com:ZeroarcSoftware/tabletable.git
@@ -92,9 +126,9 @@ To watch for changes:
 
     npm run watch
 
-## Todo
+## Issues
+Issues are tracked in [Github Issues](https://github.com/ZeroarcSoftware/tabletable/issues)
 
-- More examples/documentation around options
-- Make tabletable handle non-Immutablejs data structures
-- Remove/optionalize Bootstrap styling
-- Make all markup swappable for custom components
+## Changes
+Changes are tracked as [Github Releases](https://github.com/ZeroarcSoftware/tabletable/releases)
+

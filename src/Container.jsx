@@ -37,7 +37,7 @@ export default class TabletableContainer extends React.Component {
         // If visible is false, hide the column. If visible is not defined, default to showing column
       if (typeof this.props.columns[k].visible === 'undefined' || this.props.columns[k].visible) {
         headerComponents.push(
-          <th key={`th-${k}`} className={this.props.columns[k].cssClass}>{this.props.columns[k].display || k}</th>
+          <th key={`th-${k}`} className={this.props.columns[k].headerCssClass}>{this.props.columns[k].display || k}</th>
         );
       }
     });
@@ -52,7 +52,7 @@ export default class TabletableContainer extends React.Component {
         // If visible is false, hide the column. If visible is not defined, default to showing column
         if (typeof this.props.columns[k].visible === 'undefined' || this.props.columns[k].visible) {
           rowComponents.push(
-            <td key={`${index}-${k}`} className={this.props.columns[k].cssClass}>{this.props.columns[k].data(row,index)}</td>
+            <td key={`${index}-${k}`} className={this.props.columns[k].rowCssClass}>{this.props.columns[k].data(row,index)}</td>
           );
         }
       });
@@ -132,11 +132,15 @@ export default class TabletableContainer extends React.Component {
   // Update local state and call external onFilterAction if defined
   handleFilterChange(e) {
     e.stopPropagation();
+    // Reset to first page in case we end up with less pages than current page number
+    this.setState({currentPage: 1});
     this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   }
 
   handleClearFilterClick(e) {
     e.stopPropagation();
+    // Reset to first page to re-orient user
+    this.setState({currentPage: 1});
     this.props.onFilterAction && this.props.onFilterAction('');
   }
 }
