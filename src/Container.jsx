@@ -46,19 +46,43 @@ export default class TabletableContainer extends React.Component {
     let takeRows = Math.min(this.props.rowsPerPage, this.props.data.count() - skipRows);
 
     let rows = this.props.data.skip(skipRows).take(takeRows).map((row,index) => {
-      let rowComponents = [];
+      // Create row context if required. Make it an immutable so nobody tries to abuse it by shoving stuff into it
+      // during a column step. We will re-project from the Immutable each time it is used
+      const context = Immutable.fromJS(this.props.rowContext ? this.props.rowContext(row,index) : {});
 
+      // Assign any row classes
+      let rowCssClass = '';
+      if (typeof this.props.rowCssClass === 'function') {
+        rowCssClass = this.props.rowCssClass(row,index,context.toObject());
+        if (typeof rowCssClass !== 'string') console.error('rowCssClass function must return a string value. Was ' + typeof rowCssClass);
+      }
+      else {
+        rowCssClass = this.props.rowCssClass;
+      }
+
+      // Build out components for the row
+      let rowComponents = [];
       Object.keys(this.props.columns).forEach(k => {
         // If visible is false, hide the column. If visible is not defined, default to showing column
         if (typeof this.props.columns[k].visible === 'undefined' || this.props.columns[k].visible) {
+          // elementCssClass can either be a string or a function that returns a string
+          let elementCssClass = '';
+          if (typeof this.props.columns[k].elementCssClass === 'function') {
+            elementCssClass = this.props.columns[k].elementCssClass(row,index,context.toObject());
+            if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
+          }
+          else {
+            elementCssClass = this.props.columns[k].elementCssClass;
+          }
+
           rowComponents.push(
-            <td key={`${index}-${k}`} className={this.props.columns[k].rowCssClass}>{this.props.columns[k].data(row,index)}</td>
+            <td key={`${index}-${k}`} className={elementCssClass}>{this.props.columns[k].data(row,index,context.toObject())}</td>
           );
         }
       });
 
       return (
-        <tr key={index}>
+        <tr key={index} className={rowCssClass}>
           {rowComponents}
         </tr>
       );
@@ -160,6 +184,8 @@ TabletableContainer.propTypes = {
   showPager: React.PropTypes.bool.isRequired,
   showFilter: React.PropTypes.bool.isRequired,
   // Optional
+  rowContext: React.PropTypes.func,
+  rowCssClass: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
   pager: React.PropTypes.func,
   onFilterAction: React.PropTypes.func,
   filterValue: React.PropTypes.string,

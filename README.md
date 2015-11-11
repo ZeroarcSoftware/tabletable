@@ -41,6 +41,10 @@ tabletable has the following component props:
 
 **filterValue [string]** - text to display in search filter.
 
+**rowContext [func(row: object, index: number): Object]** - callback function invoked once per row with row and index arguments and returns an object. This object will be passed to the column definition object. It is intended to alleviate situations where identical expensive computations need to be performed for more than one column.
+
+**rowCssClass [string]** - CSS class(es) to use for row (tr) element.
+
 ### Column definition options
 Column definitions are a flexible way to get some fairly complex behaviors into the table while also allowing the *shape* of the data to be however you prefer. Each column defines a function that receives the row data and index as arguments and returns a React component that displays the content. This means that you can drive complex behaviors from the state and props of the parent component. The properties available in the definition objects are:
 
@@ -52,7 +56,7 @@ Column definitions are a flexible way to get some fairly complex behaviors into 
 
 **headerCssClass [string]** - CSS class(es) to use for header column (th) element.
 
-**rowCssClass [string]** - CSS class(es) to use for row column (td) element.
+**elementCssClass [string]** - CSS class(es) to use for row column (td) element.
 
 **visible [bool]** - show/hide the column.
 
@@ -62,7 +66,7 @@ Column definitions are a flexible way to get some fairly complex behaviors into 
           display: 'Index',
           headerCssClass: 'col-sm-1',
           visible: true,
-          data: (row,index) => <div>{index}</div>,
+          data: (row,index,context) => <div>{index}</div>,
       },
       name: {
           display: 'Name',
