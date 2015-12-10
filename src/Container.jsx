@@ -126,7 +126,7 @@ export default class TabletableContainer extends React.Component {
           <div className={filterClasses}>
             <div className='input-group col-xs-4 col-xs-offset-8 room-bottom'>
               <button className={clearClasses} style={{position: 'absolute', right: '6px', top: '6px', zIndex: 3}} onClick={this.handleClearFilterClick}><i className='fa fa-times'></i> Clear</button>
-              <input type='text' className='form-control' placeholder='Filter outputs' value={this.props.filterValue} onChange={this.handleFilterChange} />
+              <input type='text' className='form-control' placeholder='Type to filter' value={this.props.filterValue} onChange={this.handleFilterChange} />
             </div>
           </div>
           {pager}
