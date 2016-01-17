@@ -33,20 +33,20 @@ export default class TabletablePager extends React.Component {
     }
 
     return (
-      <div className='btn-toolbar text-center room-top room-bottom' role='toolbar' style={{marginBottom: '0px'}} >
+      <div className='btn-toolbar text-center room-top room-bottom' role='toolbar' style={{marginBottom: '20px'}} >
         <div className='btn-group pull-left' role='group'>
           <button className='btn btn-white btn-sm' onClick={this.firstPageChange}><i className='fa fa-step-backward'></i> First</button>
         </div>
         <div className='btn-group pull-right' role='group'>
           <button className='btn btn-white btn-sm' onClick={this.lastPageChange}><i className='fa fa-step-forward'></i> Last</button>
         </div>
-        <div className='btn-group' role='group'>
+        <div className='btn-group' role='group' style={{float:'none'}}>
           <button className='btn btn-white btn-sm' onClick={this.previousPageChange}><i className='fa fa-chevron-left'></i> Prev</button>
         </div>
-        <div className='btn-group' role='group'>
+        <div className='btn-group' role='group' style={{float:'none'}}>
           {options}
         </div>
-        <div className='btn-group' role='group'>
+        <div className='btn-group' role='group' style={{float:'none'}}>
           <button className='btn btn-white btn-sm' onClick={this.nextPageChange}><i className='fa fa-chevron-right'></i> Next</button>
         </div>
       </div>

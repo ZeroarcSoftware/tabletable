@@ -118,7 +118,7 @@ export default class TabletableContainer extends React.Component {
     });
 
     let clearClasses = ClassNames('btn', 'btn-white', 'btn-xs', {
-      hidden: this.props.filterValue.length === 0
+      hidden: !this.props.filterValue || this.props.filterValue.length === 0
     });
 
     return (
