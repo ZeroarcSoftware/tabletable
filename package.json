@@ -1,0 +1,40 @@
+{
+  "name": "tabletable",
+  "version": "0.3.2",
+  "description": "A simple and extremely flexible table component written in React.",
+  "main": "dist/entry.js",
+  "scripts": {
+    "build": "$(npm bin)/babel --optional es7.decorators src/ -d dist/",
+    "watch": "$(npm bin)/babel --optional es7.decorators src/ -d dist/ --watch",
+    "demo-build": "$(npm bin)/browserify --extension=.jsx -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread --optional es7.decorators ] -o test/index.js",
+    "demo-watch": "$(npm bin)/watchify --extension=.jsx -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread --optional es7.decorators ] -o test/index.js",
+    "prepublish": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZeroarcSoftware/tabletable.git"
+  },
+  "keywords": [
+    "Reactjs",
+    "Table"
+  ],
+  "author": "Zeroarc Software",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ZeroarcSoftware/tabletable/issues"
+  },
+  "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
+  "devDependencies": {
+    "babel": "^5.8.29",
+    "react-dom": "^0.14.6",
+    "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "autobind-decorator": "^1.3.3",
+    "classnames": "^2.2.3",
+    "immutable": "^3.7.6",
+    "react": "^0.14.6",
+    "react-addons-shallow-compare": "^0.14.6"
+  }
+}
