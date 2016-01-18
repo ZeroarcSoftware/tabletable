@@ -1585,4 +1585,5 @@ input[type="button"].btn-block {
 
 table.table {
   display: table;
+  background-color: white;
 }
