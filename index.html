@@ -2,216 +2,52 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Tabletable by ZeroarcSoftware</title>
+    <title>tabletable by ZeroarcSoftware</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-63369739-2', 'auto');
+      ga('require', 'linkid', 'linkid.js');
+      ga('send', 'pageview');
+
+    </script>
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Tabletable</h1>
-      <h2 class="project-tagline">Simple reactjs Table</h2>
+      <h1 class="project-name">tabletable</h1>
+      <h2 class="project-tagline">Simple React Table</h2>
       <a href="https://github.com/ZeroarcSoftware/tabletable" class="btn">View on GitHub</a>
-      <a href="https://github.com/ZeroarcSoftware/tabletable/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/ZeroarcSoftware/tabletable/tarball/master" class="btn">Download .tar.gz</a>
+      <a href="http://tabletable.zeroarc.com/test/" class="btn">Demo</a>
+      <a href="https://github.com/ZeroarcSoftware/tabletable/releases" class="btn">Download</a>
     </section>
 
     <section class="main-content">
       <h1>
-<a id="tabletable" class="anchor" href="#tabletable" aria-hidden="true"><span class="octicon octicon-link"></span></a>tabletable</h1>
+        <a id="tabletable" class="anchor" href="#tabletable" aria-hidden="true"><span class="octicon octicon-link"></span></a>tabletable</h1>
 
-<h2>
-<a id="react-simple-table" class="anchor" href="#react-simple-table" aria-hidden="true"><span class="octicon octicon-link"></span></a>React Simple Table</h2>
+        <p>tabletable is a simple table component written purely in React. It is the result of our frustrations with other React tables that are overly prescriptive in how they must be used and styled. tabletable intentionally leaves styling and functionality up to the integrator to make it easy to customize and integrate into complex applications.</p>
 
-<p>tabletable is a simple table component written purely in React. It is the result of my frustrations with Griddle and other React tables that are overly prescriptive in how they must be used and make things very difficult to customize and integrate into complex applications.</p>
+        <p>tabletable takes any sort of data structure and allows you to define your columns' markup and data projections as you like. It is also server-side rendering friendly.</p>
 
-<p>tabletable takes any sort of data structure and allows you to define your columns' markup and data projections as you like. It is also server-side rendering friendly.</p>
-
-<p>tabletable has some limitations that I hope to address in the future:</p>
-
-<ul>
-<li>It requires an Immutablejs data structure for its data</li>
-<li>It emits some hardcoded bootstrap styling</li>
-<li>Only pager markup can be switched out for a custom component</li>
-</ul>
-
-<p>If you are interested in helping with any of this, I would gladly take pull requests.</p>
-
-<h2>
-<a id="using-it" class="anchor" href="#using-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using it</h2>
-
-<p>To use tabletable:</p>
-
-<ul>
-<li>Install the component through NPM</li>
-<li>Require it</li>
-<li>Pass it an Immutablejs Sequence of rows, a column definition object, and an optional filter handler.</li>
-</ul>
-
-<h3>
-<a id="component-props" class="anchor" href="#component-props" aria-hidden="true"><span class="octicon octicon-link"></span></a>Component props</h3>
-
-<p>tabletable has the following component props:</p>
-
-<h4>
-<a id="required" class="anchor" href="#required" aria-hidden="true"><span class="octicon octicon-link"></span></a>Required</h4>
-
-<p><strong>data [Immutable.Seq]</strong> - structured source data.</p>
-
-<p><strong>columns [object]</strong> - column definition object.</p>
-
-<h4>
-<a id="optional" class="anchor" href="#optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional</h4>
-
-<p><strong>rowsPerPage [number]</strong> - number of rows to display per page.</p>
-
-<p><strong>pagerSize [number]</strong> - number pages to display in pager.</p>
-
-<p><strong>showPager [bool]</strong> - show/hide the pager.</p>
-
-<p><strong>showFilter [bool]</strong> - show/hide the filter input.</p>
-
-<p><strong>pager [React.Component]</strong> - pager component to use in place of default pager.</p>
-
-<p><strong>onFilterAction [func(filterValue: string)]</strong> - callback function for responding to filter input.</p>
-
-<p><strong>filterValue [string]</strong> - text to display in search filter.</p>
-
-<p><strong>rowContext [func(row: object, index: number): Object]</strong> - callback function invoked once per row with row and index arguments and returns an object. This object will be passed to the column definition object. It is intended to alleviate situations where identical expensive computations need to be performed for more than one column.</p>
-
-<p><strong>rowCssClass [string]</strong> - CSS class(es) to use for row (tr) element.</p>
-
-<h3>
-<a id="column-definition-options" class="anchor" href="#column-definition-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Column definition options</h3>
-
-<p>Column definitions are a flexible way to get some fairly complex behaviors into the table while also allowing the <em>shape</em> of the data to be however you prefer. Each column defines a function that receives the row data and index as arguments and returns a React component that displays the content. This means that you can drive complex behaviors from the state and props of the parent component. The properties available in the definition objects are:</p>
-
-<h4>
-<a id="required-1" class="anchor" href="#required-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Required</h4>
-
-<p><strong>data [func(row: object, index: number)]</strong> - a function that transforms the row data into a React component to be displayed.</p>
-
-<h4>
-<a id="optional-1" class="anchor" href="#optional-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional</h4>
-
-<p><strong>display [string]</strong> - Header value for column. If not defined, the property name for the column object will be used instead.</p>
-
-<p><strong>headerCssClass [string]</strong> - CSS class(es) to use for header column (th) element.</p>
-
-<p><strong>elementCssClass [string]</strong> - CSS class(es) to use for row column (td) element.</p>
-
-<p><strong>visible [bool]</strong> - show/hide the column.</p>
-
-<h3>
-<a id="contrived-example" class="anchor" href="#contrived-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contrived Example</h3>
-
-<pre><code>let columnDefs = {
-  index: {
-      display: 'Index',
-      headerCssClass: 'col-sm-1',
-      visible: true,
-      data: (row,index,context) =&gt; &lt;div&gt;{index}&lt;/div&gt;,
-  },
-  name: {
-      display: 'Name',
-      headerCssClass: 'col-sm-10',
-      data: row =&gt; &lt;div&gt;{row.get('name')}&lt;/div&gt;,
-  },
-  timestamp: {
-      display: 'Created',
-      headerCssClass: 'col-sm-1',
-      data: row =&gt; &lt;div&gt;{row.get('timestamp')}&lt;/div&gt;,
-  },
-};
+        <div id='tabletable_example' style='width: 800px'></div>
+        <script src="/tabletable_example.js"></script>
 
 
- handleFilterAction(filterValue) {
-    console.log('Filter value is: ' + filterValue);
- },
-
-
- &lt;Tabletable
-    data={myCrazyCustomImmutablejsDataStructure}
-    columns={columnDefs}
-    onFilterAction={handleFilterAction}
- /&gt;
-</code></pre>
-
-<p>To change pager attributes:</p>
-
-<pre><code> &lt;Tabletable
-    data={myCrazyCustomImmutablejsDataStructure}
-    columns={columnDefs}
-    onFilterAction={handleFilterAction}
-    rowsPerPage={100}
-    pagerSize={5}
- /&gt;
-</code></pre>
-
-<p>You can also define a custom pager that will be substituted for the default pager:</p>
-
-<pre><code> MyCustomPager = require('./mycustompager');
-
- &lt;Tabletable
-    data={myCrazyCustomImmutablejsDataStructure}
-    columns={columnDefs}
-    onFilterAction={handleFilterAction}
-    pager={MyCustomPager}
-/&gt;
-</code></pre>
-
-<p>The custom pager needs to behave similarly and accept the same props as the default pager. I suggest you copy src/Pager.jsx and modify to suit your needs.</p>
-
-<h2>
-<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
-
-<p>First, setup your local environment:</p>
-
-<pre><code>git clone git@github.com:ZeroarcSoftware/tabletable.git
-cd tabletable
-npm install
-</code></pre>
-
-<p>Next, build the project (for use in a npm link scenario):</p>
-
-<pre><code>npm run build
-</code></pre>
-
-<p>To watch for changes:</p>
-
-<pre><code>npm run watch
-</code></pre>
-
-<h2>
-<a id="issues" class="anchor" href="#issues" aria-hidden="true"><span class="octicon octicon-link"></span></a>Issues</h2>
-
-<p>Issues are tracked in <a href="https://github.com/ZeroarcSoftware/tabletable/issues">Github Issues</a></p>
-
-<h2>
-<a id="changes" class="anchor" href="#changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Changes</h2>
-
-<p>Changes are tracked as <a href="https://github.com/ZeroarcSoftware/tabletable/releases">Github Releases</a></p>
+        <p>For more information on use and contribution, check out the <a href="https://github.com/ZeroarcSoftware/tabletable/blob/master/README.md">Readme</a>.</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/ZeroarcSoftware/tabletable">Tabletable</a> is maintained by <a href="https://github.com/ZeroarcSoftware">ZeroarcSoftware</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/ZeroarcSoftware/carbondream">Carbondream</a> is maintained by <a href="http://www.zeroarc.com">Zeroarc</a>.</span>
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+        <span class="site-footer-credits"><a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-
     </section>
-
-            <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-63369739-2");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-
   </body>
 </html>
