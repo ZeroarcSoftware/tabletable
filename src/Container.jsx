@@ -13,7 +13,7 @@ let ClassNames = require('classnames');
 let Autobind = require('autobind-decorator');
 
 // Local
-let Pager = require('./Pager');
+import Pager from './Pager';
 
 
 @Autobind

@@ -13,8 +13,8 @@ let Immutable = require('immutable');
 let Autobind = require('autobind-decorator');
 
 // Local
-let Tabletable = require('./Container');
-let fakeData = require('../test/fake_data.json');
+import Tabletable from './Container';
+import fakeData from '../test/fake_data.json';
 
 
 @Autobind
@@ -59,6 +59,7 @@ class Demo extends React.Component {
         data={immutableData}
         columns={columnDefs}
         pagerSize={5}
+        rowsPerPage={10}
       />
     );
   }
