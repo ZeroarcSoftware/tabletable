@@ -181,7 +181,14 @@ TabletableContainer.defaultProps = {
 };
 
 TabletableContainer.propTypes = {
-  data: React.PropTypes.instanceOf(Immutable.Seq).isRequired,
+  data: (props, propName, componentName) => {
+    if (!Immutable.Iterable.isIterable(props[propName])) {
+      return new Error(
+          'Invalid prop `' + propName + '` supplied to' +
+          ' `' + componentName + '`. Expected Immutable iterable.'
+        );
+    }
+  },
   columns: React.PropTypes.object.isRequired,
   rowsPerPage: React.PropTypes.number.isRequired,
   pagerSize: React.PropTypes.number.isRequired,
