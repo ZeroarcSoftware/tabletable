@@ -1,0 +1,10 @@
+[ignore]
+<PROJECT_ROOT>/node_modules/fbj
+
+[include]
+
+[libs]
+node_modules/immutable/dist/immutable.js.flow
+
+[options]
+esproposal.decorators=ignore

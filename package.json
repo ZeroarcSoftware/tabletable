@@ -1,6 +1,6 @@
 {
   "name": "tabletable",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/entry.js",
   "scripts": {
@@ -57,6 +57,8 @@
     "babel-preset-react": "^6.11.1",
     "babelify": "^7.3.0",
     "browserify": "^13.1.0",
+    "flow-bin": "^0.40.0",
+    "flow-typed": "^2.0.0",
     "watchify": "^3.7.0"
   },
   "dependencies": {
