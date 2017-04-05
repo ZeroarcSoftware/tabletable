@@ -1,32 +1,44 @@
-/* Copyright 2015 Zeroarc Software, LLC
-*
-*  Pager control
-*/
+//@flow
+// tabletable - Copyright 2017 Zeroarc Software, LLC
+'use strict';
 
-// External
-let React = require('react');
-let ReactShallowCompare = require('react-addons-shallow-compare');
-let ClassNames = require('classnames');
-let Autobind = require('autobind-decorator');
+const React = require('react');
+const ReactShallowCompare = require('react-addons-shallow-compare');
+const ClassNames = require('classnames');
+const Autobind = require('autobind-decorator');
+
+type Props = {
+  displayPages: number,
+  maxPage: number,
+  currentPage: number,
+  onPageChange: (page: number) => void
+};
 
 @Autobind
 export default class TabletablePager extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    return ReactShallowCompare(this, nextProps, nextState);
+  props: Props;
+
+  static defaultProps: {
+    maxPage: number,
+    currentPage: number,
+  }
+
+  shouldComponentUpdate(nextProps: Props) {
+    return ReactShallowCompare(this, nextProps);
   }
 
   render() {
     let options = [];
 
     let startIndex = Math.max(this.props.currentPage - Math.floor(this.props.displayPages / 2), 1);
-    let endIndex = Math.min(startIndex + (this.props.displayPages - 1), this.props.maxPage);
+    const endIndex = Math.min(startIndex + (this.props.displayPages - 1), this.props.maxPage);
 
     if (this.props.maxPage >= this.props.displayPages && (endIndex - startIndex) <= this.props.displayPages) {
       startIndex = endIndex - (this.props.displayPages - 1);
     }
 
     for(let i = startIndex; i <= endIndex; i++){
-      let thisButtonClasses = ClassNames('btn', 'btn-white', 'btn-sm', {
+      const thisButtonClasses = ClassNames('btn', 'btn-white', 'btn-sm', {
         'label-success': this.props.currentPage === i
       });
       options.push(<button key={i} className={thisButtonClasses} data-value={i} onClick={this.pageChange}>{i}</button>);
@@ -57,32 +69,32 @@ export default class TabletablePager extends React.Component {
   // Custom methods
   //
 
-  pageChange(e) {
-    e.stopPropagation();
+  pageChange(e: SyntheticInputEvent) {
+    e.preventDefault();
     this.props.onPageChange(parseInt(e.target.getAttribute('data-value')));
   }
 
-  previousPageChange(e) {
-    e.stopPropagation();
+  previousPageChange(e: SyntheticInputEvent) {
+    e.preventDefault();
     if (this.props.currentPage > 1) {
       this.props.onPageChange(this.props.currentPage - 1);
     }
   }
 
-  nextPageChange(e) {
-    e.stopPropagation();
+  nextPageChange(e: SyntheticInputEvent) {
+    e.preventDefault();
     if (this.props.currentPage < this.props.maxPage) {
       this.props.onPageChange(this.props.currentPage + 1);
     }
   }
 
-  firstPageChange(e) {
-    e.stopPropagation();
+  firstPageChange(e: SyntheticInputEvent) {
+    e.preventDefault();
     this.props.onPageChange(1);
   }
 
-  lastPageChange(e) {
-    e.stopPropagation();
+  lastPageChange(e: SyntheticInputEvent) {
+    e.preventDefault();
     this.props.onPageChange(this.props.maxPage);
   }
 }

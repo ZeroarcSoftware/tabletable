@@ -24,7 +24,7 @@ tabletable has the following component props:
 #### Required
 **data [Immutable.Seq]** - structured source data.
 
-**columns [object]** - column definition object.
+**columns [object[]]** - array of column definition objects.
 
 #### Optional
 **rowsPerPage [number]** - number of rows to display per page.
@@ -61,30 +61,28 @@ Column definitions are a flexible way to get some fairly complex behaviors into 
 **visible [bool]** - show/hide the column.
 
 ### Contrived Example
-    let columnDefs = {
-      index: {
+    let columnDefs = [
+      {
           display: 'Index',
           headerCssClass: 'col-sm-1',
           visible: true,
           data: (row,index,context) => <div>{index}</div>,
       },
-      name: {
+      {
           display: 'Name',
           headerCssClass: 'col-sm-10',
           data: row => <div>{row.get('name')}</div>,
       },
-      timestamp: {
+      {
           display: 'Created',
           headerCssClass: 'col-sm-1',
           data: row => <div>{row.get('timestamp')}</div>,
       },
-    };
-
+    ];
 
      handleFilterAction(filterValue) {
         console.log('Filter value is: ' + filterValue);
      },
-
 
      <Tabletable
         data={myCrazyCustomImmutablejsDataStructure}
