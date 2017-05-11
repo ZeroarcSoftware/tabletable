@@ -103,10 +103,3 @@ TabletablePager.defaultProps = {
   maxPage: 1,
   currentPage: 1,
 };
-
-TabletablePager.propTypes = {
-  displayPages: React.PropTypes.number.isRequired,
-  maxPage: React.PropTypes.number.isRequired,
-  currentPage: React.PropTypes.number.isRequired,
-  onPageChange: React.PropTypes.func.isRequired,
-};
