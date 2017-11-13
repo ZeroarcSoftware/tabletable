@@ -6,53 +6,42 @@
 'use strict';
 
 // External
-let React = require('react');
-let ReactDOM = require('react-dom');
-let ReactShallowCompare = require('react-addons-shallow-compare');
-let Immutable = require('immutable');
-let Autobind = require('autobind-decorator');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const Immutable = require('immutable');
 
 // Local
 import Tabletable from './Container';
 import fakeData from '../test/fake_data.json';
 
 
-@Autobind
-class Demo extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return ReactShallowCompare(this, nextProps, nextState);
-  }
-
+class Demo extends React.Component<*> {
   render() {
-    let immutableData = Immutable.fromJS(fakeData).toSeq();
+    let immutableData = Immutable.fromJS(fakeData);
 
-    let columnDefs = {
-      index: {
+    let columnDefs = [
+      {
         display: 'Index',
         headerCssClass: 'col-sm-1',
         visible: true,
         data: (row,index,context) => <div>{index}</div>,
       },
-      name: {
+      {
         display: 'Name',
         headerCssClass: 'col-sm-4',
         data: row => <div>{row.get('name')}</div>,
       },
-      skill: {
+      {
         display: 'Skill',
         headerCssClass: 'col-sm-4',
         data: row => <div>{row.get('skill')}</div>,
       },
-      color: {
+      {
         display: 'Favorite Color',
         headerCssClass: 'col-sm-3',
         data: row => <div>{row.get('color')}</div>,
       }
-    };
+    ];
 
     return (
       <Tabletable

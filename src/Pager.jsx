@@ -2,10 +2,9 @@
 // tabletable - Copyright 2017 Zeroarc Software, LLC
 'use strict';
 
-const React = require('react');
-const ReactShallowCompare = require('react-addons-shallow-compare');
-const ClassNames = require('classnames');
-const Autobind = require('autobind-decorator');
+import Autobind from 'autobind-decorator';
+import ClassNames from 'classnames';
+import React from 'react';
 
 type Props = {
   displayPages: number,
@@ -15,16 +14,10 @@ type Props = {
 };
 
 @Autobind
-export default class TabletablePager extends React.Component {
-  props: Props;
-
+export default class TabletablePager extends React.Component<Props> {
   static defaultProps: {
     maxPage: number,
     currentPage: number,
-  }
-
-  shouldComponentUpdate(nextProps: Props) {
-    return ReactShallowCompare(this, nextProps);
   }
 
   render() {
@@ -69,31 +62,31 @@ export default class TabletablePager extends React.Component {
   // Custom methods
   //
 
-  pageChange(e: SyntheticInputEvent) {
+  pageChange(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     this.props.onPageChange(parseInt(e.target.getAttribute('data-value')));
   }
 
-  previousPageChange(e: SyntheticInputEvent) {
+  previousPageChange(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     if (this.props.currentPage > 1) {
       this.props.onPageChange(this.props.currentPage - 1);
     }
   }
 
-  nextPageChange(e: SyntheticInputEvent) {
+  nextPageChange(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     if (this.props.currentPage < this.props.maxPage) {
       this.props.onPageChange(this.props.currentPage + 1);
     }
   }
 
-  firstPageChange(e: SyntheticInputEvent) {
+  firstPageChange(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     this.props.onPageChange(1);
   }
 
-  lastPageChange(e: SyntheticInputEvent) {
+  lastPageChange(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     this.props.onPageChange(this.props.maxPage);
   }

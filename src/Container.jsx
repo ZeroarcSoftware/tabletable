@@ -33,10 +33,7 @@ type State = {
 
 
 @Autobind
-export default class TabletableContainer extends React.Component {
-  props: Props;
-  state: State;
-
+export default class TabletableContainer extends React.Component<Props, State> {
   static defaultProps: {
     rowsPerPage: number,
     pagerSize: number,
@@ -184,14 +181,14 @@ export default class TabletableContainer extends React.Component {
   }
 
   // Update local state and call external onFilterAction if defined
-  handleFilterChange(e: SyntheticInputEvent) {
+  handleFilterChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     // Reset to first page in case we end up with less pages than current page number
     this.setState({currentPage: 1});
     this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   }
 
-  handleClearFilterClick(e: SyntheticInputEvent) {
+  handleClearFilterClick(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     // Reset to first page to re-orient user
     this.setState({currentPage: 1});

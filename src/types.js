@@ -15,9 +15,9 @@ export type Context = Immutable.Map<any,any> | Immutable.List<any>;
 // Columns have specific properties
 type Column = {
   display: string,
-  headerCssClass: string,
-  elementCssClass: (Row,number,Context) => string,
-  data: (Row,number) => React$Element<*>
+  headerCssClass?: string,
+  elementCssClass?: (Row,number,Context) => string,
+  data: (Row,number,Context) => React$Element<*>
 };
 export type Columns = Array<Column>;
 

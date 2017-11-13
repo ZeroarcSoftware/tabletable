@@ -4,9 +4,4 @@
  */
 'use strict';
 
-// Local
-let Container = require('./Container');
-
-console.log('Q: What is better than one table? A: Two tables.');
-
-module.exports = Container;
+export { Container as default } from './Container';
