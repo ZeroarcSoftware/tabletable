@@ -1,8 +1,8 @@
 {
   "name": "tabletable",
-  "version": "2.0.0-beta",
+  "version": "2.0.1-beta",
   "description": "A simple and extremely flexible table component written in React.",
-  "main": "dist/entry.js",
+  "main": "dist/Container.js",
   "scripts": {
     "demo-build-old": "$(npm bin)/browserify --extension=.jsx -e src/demo.jsx -o test/index.js",
     "demo-watch-old": "$(npm bin)/watchify --extension=.jsx -e src/demo.jsx -o test/index.js",

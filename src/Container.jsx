@@ -3,7 +3,6 @@
 'use strict';
 
 import React from 'react';
-import ReactShallowCompare from 'react-addons-shallow-compare';
 import * as Immutable from 'immutable';
 import ClassNames from 'classnames';
 import Autobind from 'autobind-decorator';
@@ -51,10 +50,6 @@ export default class TabletableContainer extends React.Component<Props, State> {
     this.state = {
       currentPage: 1,
     };
-  }
-
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    return ReactShallowCompare(this, nextProps, nextState);
   }
 
   render() {
