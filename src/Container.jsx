@@ -3,7 +3,6 @@
 'use strict';
 
 import React from 'react';
-import ReactShallowCompare from 'react-addons-shallow-compare';
 import * as Immutable from 'immutable';
 import ClassNames from 'classnames';
 import Autobind from 'autobind-decorator';
@@ -25,6 +24,8 @@ type Props = {
   pager?: any, // TODO WTH is the type for this
   onFilterAction?: (string) => void,
   filterValue?: string,
+  currentPage?: number,
+  onPageChange?: (page: number) => void,
 }
 
 type State = {
@@ -33,10 +34,7 @@ type State = {
 
 
 @Autobind
-export default class TabletableContainer extends React.Component {
-  props: Props;
-  state: State;
-
+export default class TabletableContainer extends React.Component<Props,State> {
   static defaultProps: {
     rowsPerPage: number,
     pagerSize: number,
@@ -52,12 +50,14 @@ export default class TabletableContainer extends React.Component {
     }
 
     this.state = {
-      currentPage: 1,
+      currentPage: this.props.currentPage || 1,
     };
   }
 
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    return ReactShallowCompare(this, nextProps, nextState);
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.currentPage !== prevProps.currentPage) {
+      this.setState({currentPage: this.props.currentPage});
+    }
   }
 
   render() {
@@ -173,25 +173,30 @@ export default class TabletableContainer extends React.Component {
         {pager}
       </div>
     );
-  }
+  };
 
   //
   // Custom methods
   //
 
   handlePageChange(pageNumber: number) {
-    this.setState({currentPage: pageNumber});
+    if (this.props.onPageChange) {
+      this.props.onPageChange(pageNumber);
+    }
+    else {
+      this.setState({currentPage: pageNumber});
+    }
   }
 
   // Update local state and call external onFilterAction if defined
-  handleFilterChange(e: SyntheticInputEvent) {
+  handleFilterChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     // Reset to first page in case we end up with less pages than current page number
     this.setState({currentPage: 1});
     this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   }
 
-  handleClearFilterClick(e: SyntheticInputEvent) {
+  handleClearFilterClick(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     // Reset to first page to re-orient user
     this.setState({currentPage: 1});

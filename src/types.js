@@ -17,7 +17,9 @@ type Column = {
   display: string,
   headerCssClass: string,
   elementCssClass: (Row,number,Context) => string,
-  data: (Row,number) => React$Element<*>
+  data: (Row,number,Context) => React$Element<*>,
+  visible: bool,
 };
+
 export type Columns = Array<Column>;
 
