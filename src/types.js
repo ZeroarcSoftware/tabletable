@@ -1,7 +1,7 @@
 // @flow
-// Copyright 2017 Zeroarc Software, LLC
+// Copyright 2018 Zeroarc Software, LLC
 
-import * as Immutable from 'immutable';
+import Immutable from 'immutable';
 
 
 // Data can be any shape as long as it is Iterable
@@ -17,7 +17,8 @@ type Column = {
   display: string,
   headerCssClass?: string,
   elementCssClass?: (Row,number,Context) => string,
-  data: (Row,number,Context) => React$Element<*>
+  data: (Row,number,Context) => React$Element<*>,
+  visible: boolean,
 };
 
 export type Columns = Array<Column>;

@@ -1,6 +1,7 @@
 const { resolve } = require('path');
 
 const config = {
+  mode: 'development',
   entry: './src/demo.jsx',
   output: {
     path: resolve(__dirname,'./test/'),
@@ -16,10 +17,6 @@ const config = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: 'babel-loader'
-      },
-      {
-        test: /\.json?$/,
-        loader: "json-loader"
       },
       {
         test: /\.scss$/,
