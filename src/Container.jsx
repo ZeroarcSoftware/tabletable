@@ -24,6 +24,8 @@ type Props = {
   pager?: any, // TODO WTH is the type for this
   onFilterAction?: (string) => void,
   filterValue?: string,
+  currentPage?: number,
+  onPageChange?: (page: number) => void,
 }
 
 type State = {
@@ -48,8 +50,14 @@ export default class TabletableContainer extends React.Component<Props, State> {
     }
 
     this.state = {
-      currentPage: 1,
+      currentPage: this.props.currentPage || 1,
     };
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.currentPage !== prevProps.currentPage) {
+      this.setState({currentPage: this.props.currentPage});
+    }
   }
 
   render() {
@@ -165,14 +173,19 @@ export default class TabletableContainer extends React.Component<Props, State> {
         {pager}
       </div>
     );
-  }
+  };
 
   //
   // Custom methods
   //
 
   handlePageChange(pageNumber: number) {
-    this.setState({currentPage: pageNumber});
+    if (this.props.onPageChange) {
+      this.props.onPageChange(pageNumber);
+    }
+    else {
+      this.setState({currentPage: pageNumber});
+    }
   }
 
   // Update local state and call external onFilterAction if defined

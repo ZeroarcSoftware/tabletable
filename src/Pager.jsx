@@ -1,5 +1,5 @@
-//@flow
-// tabletable - Copyright 2017 Zeroarc Software, LLC
+// @flow
+// tabletable - Copyright 2018 Zeroarc Software, LLC
 'use strict';
 
 import Autobind from 'autobind-decorator';

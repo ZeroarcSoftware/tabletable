@@ -19,5 +19,6 @@ type Column = {
   elementCssClass?: (Row,number,Context) => string,
   data: (Row,number,Context) => React$Element<*>
 };
+
 export type Columns = Array<Column>;
 
