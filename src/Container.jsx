@@ -3,7 +3,7 @@
 'use strict';
 
 import React from 'react';
-import Immutable from 'immutable';
+import * as Immutable from 'immutable';
 import ClassNames from 'classnames';
 import Autobind from 'autobind-decorator';
 
