@@ -12,20 +12,22 @@ import Pager from './Pager';
 import type { Data, Columns, Row, Context } from './types';
 
 type Props = {
-  data: Data,
   columns: Columns,
-  rowsPerPage: number,
+  data: Data,
   pagerSize: number,
-  showPager: bool,
+  rowsPerPage: number,
   showFilter: bool,
+  showPager: bool,
+  tableCssClass: string,
+  containerCssClass: string,
   // Optional
+  currentPage?: number,
+  filterValue?: string,
+  onFilterAction?: (string) => void,
+  onPageChange?: (page: number) => void,
+  pager?: any, // TODO WTH is the type for this
   rowContext?: (Row,number) => any,
   rowCssClass?: (Row,number,Context) => string,
-  pager?: any, // TODO WTH is the type for this
-  onFilterAction?: (string) => void,
-  filterValue?: string,
-  currentPage?: number,
-  onPageChange?: (page: number) => void,
 }
 
 type State = {
@@ -36,10 +38,12 @@ type State = {
 @Autobind
 export default class TabletableContainer extends React.Component<Props, State> {
   static defaultProps: {
-    rowsPerPage: number,
+    containerCssClass: string,
     pagerSize: number,
     showPager: bool,
     showFilter: bool,
+    tableCssClass: string,
+    rowsPerPage: number,
   }
 
   constructor(props: Props) {
@@ -157,10 +161,10 @@ export default class TabletableContainer extends React.Component<Props, State> {
       : '';
 
     return (
-      <div className='tabletable'>
+      <div className={this.props.containerCssClass}>
         {filterControl}
         {pager}
-        <table className='table table-striped table-bordered table-hover'>
+        <table className={this.props.tableCssClass}>
           <thead>
             <tr>
               {headerComponents}
@@ -205,8 +209,10 @@ export default class TabletableContainer extends React.Component<Props, State> {
 }
 
 TabletableContainer.defaultProps = {
-  rowsPerPage: 5,
+  containerCssClass: 'tabletable',
   pagerSize: 10,
+  rowsPerPage: 5,
   showPager: true,
   showFilter: false,
+  tableCssClass: 'table table-striped table-bordered table-hover',
 };
