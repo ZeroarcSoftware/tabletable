@@ -24,3 +24,6 @@ node_modules
 
 # Don't check in build artifacts, this is only published to npm
 dist/
+
+# Ignore vscode directory
+.vscode
