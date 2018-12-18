@@ -23,6 +23,7 @@ type Props = {
   rowCssClass?: (Row,number,Context) => string,
   pager?: any, // TODO WTH is the type for this
   onFilterAction?: (string) => void,
+  onSearch?: () => void,
   filterValue?: string,
   currentPage?: number,
   onPageChange?: (page: number) => void,
@@ -141,6 +142,12 @@ export default class TabletableContainer extends React.Component<Props, State> {
       hidden: !this.props.onFilterAction || !this.props.showFilter
     });
 
+    const filterButtonClasses = ClassNames('btn btn-white', {
+      hidden: !this.props.onFilterAction,
+      hidden: !this.props.showFilter,
+      hidden: !this.props.onSearch,
+    });
+
     const clearClasses: string = ClassNames('btn', 'btn-white', 'btn-xs', {
       hidden: !this.props.filterValue || this.props.filterValue.length === 0
     });
@@ -148,10 +155,15 @@ export default class TabletableContainer extends React.Component<Props, State> {
     const filterControl = this.props.showFilter
       ? <div className={filterClasses}>
         <div className='input-group col-xs-4 col-xs-offset-8'>
-          <button className={clearClasses} style={{position: 'absolute', right: '6px', top: '6px', zIndex: 3}} onClick={this.handleClearFilterClick}>
+          <button className={clearClasses} style={{position: 'absolute', right: '45px', top: '6px', zIndex: 10}} onClick={this.handleClearFilterClick}>
             <i className='fa fa-times'></i> Clear
           </button>
-          <input type='text' className='form-control' placeholder='Type to filter' value={this.props.filterValue} onChange={this.handleFilterChange} />
+          <input type='text' className='form-control' placeholder='Type to filter' value={this.props.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
+          <span className="input-group-btn">
+            <button className={filterButtonClasses} onClick={this.handleSearchClick}>
+              <i className='fa fa-search'></i>
+            </button>
+          </span>
         </div>
       </div>
       : '';
@@ -196,11 +208,24 @@ export default class TabletableContainer extends React.Component<Props, State> {
     this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   }
 
+  // Call external onSearch if pased
+  handleSearchClick(e: SyntheticInputEvent<*>) {
+    e.stopPropagation();
+    this.props.onSearch && this.props.onSearch();
+  }
+
   handleClearFilterClick(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     // Reset to first page to re-orient user
     this.setState({currentPage: 1});
     this.props.onFilterAction && this.props.onFilterAction('');
+    this.props.onSearch && this.props.onSearch();
+  }
+
+  handleKeyPress(e: SyntheticKeyboardEvent<*>) {
+    if (e.key === 'Enter') {
+      this.props.onSearch && this.props.onSearch();
+    }
   }
 }
 
