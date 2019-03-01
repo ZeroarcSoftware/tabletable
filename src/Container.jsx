@@ -224,6 +224,7 @@ export default class TabletableContainer extends React.Component<Props, State> {
 
   handleKeyPress(e: SyntheticKeyboardEvent<*>) {
     if (e.key === 'Enter') {
+      e.preventDefault();
       this.props.onSearch && this.props.onSearch();
     }
   }
