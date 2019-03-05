@@ -1,6 +1,6 @@
 {
   "name": "tabletable",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
   "scripts": {
@@ -26,28 +26,30 @@
   },
   "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-flow-react-proptypes": "^24.0.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "flow-bin": "^0.78.0",
-    "flow-copy-source": "^2.0.2",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-flow-react-proptypes": "^25.0.0",
+    "flow-bin": "^0.94.0",
+    "flow-copy-source": "^2.0.3",
     "flow-typed": "^2.4.0",
-    "webpack": "^4.16.5",
-    "webpack-cli": "^3.1.0"
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3"
   },
   "peerDependencies": {
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
   },
   "dependencies": {
-    "autobind-decorator": "^2.1.0",
+    "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.5",
-    "immutable": "^4.0.0-rc.9",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "immutable": "^4.0.0-rc.12",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3"
   }
 }
