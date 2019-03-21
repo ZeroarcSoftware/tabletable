@@ -37,7 +37,7 @@ type State = {
 
 
 @Autobind
-export default class TabletableContainer extends React.Component<Props, State> {
+export default class TabletableContainer extends React.PureComponent<Props, State> {
   static defaultProps: {
     containerCssClass: string,
     pagerSize: number,
@@ -142,32 +142,32 @@ export default class TabletableContainer extends React.Component<Props, State> {
     }
 
     // Hide filter unless we have a search handler and showFilter is true
-    const filterClasses = ClassNames({
-      hidden: !this.props.onFilterAction || !this.props.showFilter
+    const filterClasses = ClassNames('row justify-content-end', {
+      'd-none': !this.props.onFilterAction || !this.props.showFilter
     });
 
-    const filterButtonClasses = ClassNames('btn btn-white', {
-      hidden: !this.props.onFilterAction,
-      hidden: !this.props.showFilter,
-      hidden: !this.props.onSearch,
+    const filterButtonClasses = ClassNames('btn btn-outline-secondary', {
+      'd-none': !this.props.onFilterAction,
+      'd-none': !this.props.showFilter,
+      'd-none': !this.props.onSearch,
     });
 
-    const clearClasses: string = ClassNames('btn', 'btn-white', 'btn-xs', {
-      hidden: !this.props.filterValue || this.props.filterValue.length === 0
+    const clearClasses: string = ClassNames('btn', 'btn-outline-secondary', 'btn-sm', {
+      'd-none': !this.props.filterValue || this.props.filterValue.length === 0
     });
 
     const filterControl = this.props.showFilter
       ? <div className={filterClasses}>
-        <div className='input-group col-xs-4 col-xs-offset-8'>
+        <div className='input-group col-4 col-xs-offset-8'>
           <button className={clearClasses} style={{position: 'absolute', right: '45px', top: '6px', zIndex: 10}} onClick={this.handleClearFilterClick}>
-            <i className='fa fa-times'></i> Clear
+            <i className='far fa-times'></i> Clear
           </button>
           <input type='text' className='form-control' placeholder='Type to filter' value={this.props.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
-          <span className="input-group-btn">
+          <div className="input-group-append">
             <button className={filterButtonClasses} onClick={this.handleSearchClick}>
-              <i className='fa fa-search'></i>
+              <i className='far fa-search'></i>
             </button>
-          </span>
+          </div>
         </div>
       </div>
       : '';
@@ -208,7 +208,7 @@ export default class TabletableContainer extends React.Component<Props, State> {
   handleFilterChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     // Reset to first page in case we end up with less pages than current page number
-    this.setState({currentPage: 1});
+    // this.setState({currentPage: 1});
     this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   }
 
