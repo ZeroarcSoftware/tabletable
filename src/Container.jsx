@@ -24,13 +24,14 @@ type Props = {
   pager?: any, // TODO WTH is the type for this
   onFilterAction?: (string) => void,
   onSearch?: () => void,
-  filterValue?: string,
+  // filterValue?: string,
   currentPage?: number,
   onPageChange?: (page: number) => void,
 }
 
 type State = {
   currentPage: number,
+  filterValue: string,
 }
 
 
@@ -52,6 +53,7 @@ export default class TabletableContainer extends React.Component<Props, State> {
 
     this.state = {
       currentPage: this.props.currentPage || 1,
+      filterValue: '',
     };
   }
 
@@ -149,7 +151,7 @@ export default class TabletableContainer extends React.Component<Props, State> {
     });
 
     const clearClasses: string = ClassNames('btn', 'btn-white', 'btn-xs', {
-      hidden: !this.props.filterValue || this.props.filterValue.length === 0
+      // hidden: !this.props.filterValue || this.props.filterValue.length === 0
     });
 
     const filterControl = this.props.showFilter
@@ -158,7 +160,7 @@ export default class TabletableContainer extends React.Component<Props, State> {
           <button className={clearClasses} style={{position: 'absolute', right: '45px', top: '6px', zIndex: 10}} onClick={this.handleClearFilterClick}>
             <i className='fa fa-times'></i> Clear
           </button>
-          <input type='text' className='form-control' placeholder='Type to filter' value={this.props.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
+          <input type='text' className='form-control' placeholder='Type to filter' value={this.state.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
           <span className="input-group-btn">
             <button className={filterButtonClasses} onClick={this.handleSearchClick}>
               <i className='fa fa-search'></i>
@@ -203,8 +205,7 @@ export default class TabletableContainer extends React.Component<Props, State> {
   // Update local state and call external onFilterAction if defined
   handleFilterChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
-    // Reset to first page in case we end up with less pages than current page number
-    this.setState({currentPage: 1});
+    this.setState({filterValue: e.target.value});
     this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   }
 
@@ -217,7 +218,7 @@ export default class TabletableContainer extends React.Component<Props, State> {
   handleClearFilterClick(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     // Reset to first page to re-orient user
-    this.setState({currentPage: 1});
+    this.setState({currentPage: 1, filterValue: ''});
     this.props.onFilterAction && this.props.onFilterAction('');
     this.props.onSearch && this.props.onSearch();
   }
@@ -225,6 +226,7 @@ export default class TabletableContainer extends React.Component<Props, State> {
   handleKeyPress(e: SyntheticKeyboardEvent<*>) {
     if (e.key === 'Enter') {
       e.preventDefault();
+      this.setState({currentPage: 1});
       this.props.onSearch && this.props.onSearch();
     }
   }
