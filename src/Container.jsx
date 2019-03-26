@@ -22,7 +22,6 @@ type Props = {
   containerCssClass: string,
   // Optional
   currentPage?: number,
-  filterValue?: string,
   onFilterAction?: (string) => void,
   onPageChange?: (page: number) => void,
   onSearch?: () => void,
@@ -33,6 +32,7 @@ type Props = {
 
 type State = {
   currentPage: number,
+  filterValue: string,
 }
 
 
@@ -56,6 +56,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
 
     this.state = {
       currentPage: this.props.currentPage || 1,
+      filterValue: '',
     };
   }
 
@@ -153,16 +154,16 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
     });
 
     const clearClasses: string = ClassNames('btn', 'btn-outline-secondary', 'btn-sm', {
-      'd-none': !this.props.filterValue || this.props.filterValue.length === 0
+      'd-none': !this.state.filterValue || this.state.filterValue.length === 0
     });
 
     const filterControl = this.props.showFilter
       ? <div className={filterClasses}>
-        <div className='input-group col-4 col-xs-offset-8'>
-          <button className={clearClasses} style={{position: 'absolute', right: '45px', top: '6px', zIndex: 10}} onClick={this.handleClearFilterClick}>
+        <div className='input-group col-4'>
+          <button className={clearClasses} style={{position: 'absolute', right: '65px', top: '3px', zIndex: 10}} onClick={this.handleClearFilterClick}>
             <i className='far fa-times'></i> Clear
           </button>
-          <input type='text' className='form-control' placeholder='Type to filter' value={this.props.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
+          <input type='text' className='form-control' placeholder='Type to filter' value={this.state.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
           <div className="input-group-append">
             <button className={filterButtonClasses} onClick={this.handleSearchClick}>
               <i className='far fa-search'></i>
@@ -208,7 +209,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
   handleFilterChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     // Reset to first page in case we end up with less pages than current page number
-    // this.setState({currentPage: 1});
+    this.setState({filterValue: e.target.value});
     this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   }
 
@@ -221,7 +222,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
   handleClearFilterClick(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     // Reset to first page to re-orient user
-    this.setState({currentPage: 1});
+    this.setState({currentPage: 1, filterValue: ''});
     this.props.onFilterAction && this.props.onFilterAction('');
     this.props.onSearch && this.props.onSearch();
   }
@@ -229,6 +230,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
   handleKeyPress(e: SyntheticKeyboardEvent<*>) {
     if (e.key === 'Enter') {
       e.preventDefault();
+      this.setState({currentPage: 1});
       this.props.onSearch && this.props.onSearch();
     }
   }

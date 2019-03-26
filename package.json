@@ -27,19 +27,19 @@
   "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.4",
-    "@babel/plugin-proposal-class-properties": "^7.3.4",
-    "@babel/plugin-proposal-decorators": "^7.3.0",
-    "@babel/plugin-transform-flow-strip-types": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-decorators": "^7.4.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",
     "babel-plugin-flow-react-proptypes": "^25.0.0",
-    "flow-bin": "^0.94.0",
+    "flow-bin": "^0.95.1",
     "flow-copy-source": "^2.0.3",
     "flow-typed": "^2.4.0",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.3.0"
   },
   "peerDependencies": {
     "react": "^16.4.2",
@@ -49,7 +49,7 @@
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.5",
     "immutable": "^4.0.0-rc.12",
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3"
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
   }
 }
