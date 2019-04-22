@@ -14,7 +14,6 @@ import type { Data, Columns, Row, Context } from './types';
 type Props = {
   columns: Columns,
   data: Data,
-  filterValue?: string,
   rowsPerPage: number,
   pagerSize: number,
   showPager: bool,
@@ -25,7 +24,7 @@ type Props = {
   pager?: any, // TODO WTH is the type for this
   onFilterAction?: (string) => void,
   onSearch?: () => void,
-  // filterValue?: string,
+  filterValue?: string,
   currentPage?: number,
   onPageChange?: (page: number) => void,
 }
@@ -55,9 +54,11 @@ export default class TabletableContainer extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.props.currentPage !== prevProps.currentPage) {
+    if (this.props.currentPage !== prevProps.currentPage) 
       this.setState({currentPage: this.props.currentPage});
-    }
+
+    if (this.props.filterValue !== prevProps.filterValue) 
+      this.setState({filterValue: this.props.filterValue});
   }
 
   render() {
