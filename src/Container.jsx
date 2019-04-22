@@ -12,8 +12,9 @@ import Pager from './Pager';
 import type { Data, Columns, Row, Context } from './types';
 
 type Props = {
-  data: Data,
   columns: Columns,
+  data: Data,
+  filterValue?: string,
   rowsPerPage: number,
   pagerSize: number,
   showPager: bool,
@@ -47,13 +48,13 @@ export default class TabletableContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    if (!Immutable.Iterable.isIterable(props.data)) {
+    if (!Immutable.Map.isMap(props.data)) {
       return new Error('Invalid prop data supplied to TableTable. Expected Immutable iterable.');
     }
 
     this.state = {
       currentPage: this.props.currentPage || 1,
-      filterValue: '',
+      filterValue: this.props.filterValue || '',
     };
   }
 

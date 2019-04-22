@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 
 
 // Data can be any shape as long as it is Iterable
-export type Data = Immutable.Iterable<number,any>;
+export type Data = Immutable.Map<number,any>;
 
 // Row can be anything
 export type Row = any;
