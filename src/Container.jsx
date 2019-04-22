@@ -48,10 +48,6 @@ export default class TabletableContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    if (!Immutable.Map.isMap(props.data)) {
-      return new Error('Invalid prop data supplied to TableTable. Expected Immutable iterable.');
-    }
-
     this.state = {
       currentPage: this.props.currentPage || 1,
       filterValue: this.props.filterValue || '',
@@ -65,6 +61,11 @@ export default class TabletableContainer extends React.Component<Props, State> {
   }
 
   render() {
+    if (!Immutable.isImmutable(this.props.data)) {
+      console.error('Invalid prop data supplied to TableTable. Expected Immutable iterable.');
+      return (<div>INVALID DATA</div>);
+    }
+
     let headerComponents = [];
 
     this.props.columns.forEach((col,i) => {
