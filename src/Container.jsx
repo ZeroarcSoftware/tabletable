@@ -143,7 +143,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
     }
 
     // Hide filter unless we have a search handler and showFilter is true
-    const filterClasses = ClassNames('row justify-content-end', {
+    const filterClasses = ClassNames('col-4 justify-content-end', {
       'd-none': !this.props.onFilterAction || !this.props.showFilter
     });
 
@@ -158,24 +158,31 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
     });
 
     const filterControl = this.props.showFilter
-      ? <div className={filterClasses}>
-        <div className='input-group col-4'>
-          <button className={clearClasses} style={{position: 'absolute', right: '65px', top: '3px', zIndex: 10}} onClick={this.handleClearFilterClick}>
-            <i className='far fa-times'></i> Clear
+      ? (
+        <div className={filterClasses}>
+          <div className='input-group'>
+            <button className={clearClasses} style={{ position: 'absolute', right: '45px', top: '3px', zIndex: 10 }} onClick={this.handleClearFilterClick}>
+              <i className='far fa-fw fa-times'></i> Clear
           </button>
-          <input type='text' className='form-control' placeholder='Type to filter' value={this.state.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
-          <div className="input-group-append">
-            <button className={filterButtonClasses} onClick={this.handleSearchClick}>
-              <i className='far fa-search'></i>
-            </button>
+            <input type='text' className='form-control' placeholder='Type to filter' value={this.state.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
+            <div className="input-group-append">
+              <button className={filterButtonClasses} onClick={this.handleSearchClick}>
+                <i className='far fa-search'></i>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )
       : '';
 
     return (
       <div className={this.props.containerCssClass}>
-        {filterControl}
+        <div className='row'>
+          <div className='col-8'>
+            {this.props.children}
+          </div>
+          {filterControl}
+        </div>
         {pager}
         <table className={this.props.tableCssClass}>
           <thead>
