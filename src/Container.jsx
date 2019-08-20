@@ -16,18 +16,23 @@ type Props = {
   data: Data,
   pagerSize: number,
   rowsPerPage: number,
+  showPager: bool,
   showFilter: bool,
   showPager: bool,
   tableCssClass: string,
   containerCssClass: string,
   // Optional
   currentPage?: number,
-  onFilterAction?: (string) => void,
-  onPageChange?: (page: number) => void,
-  onSearch?: () => void,
+  filterValue?: string,
   pager?: any, // TODO WTH is the type for this
+  onClear?: () => void,
+  onSearch?: (searchText: string) => void,
+  onPageChange?: (page: number) => void,
   rowContext?: (Row,number) => any,
   rowCssClass?: (Row,number,Context) => string,
+  showSpinner?: bool,
+  spinner?: *,
+  totalRows?: number,
 }
 
 type State = {
@@ -50,23 +55,28 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
   constructor(props: Props) {
     super(props);
 
-    if (!Immutable.Iterable.isIterable(props.data)) {
-      return new Error('Invalid prop data supplied to TableTable. Expected Immutable iterable.');
-    }
-
     this.state = {
       currentPage: this.props.currentPage || 1,
-      filterValue: '',
+      filterValue: this.props.filterValue || '',
     };
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.props.currentPage !== prevProps.currentPage) {
+    if (!this.props.currentPage) return;
+
+    if (this.props.currentPage !== prevProps.currentPage) 
       this.setState({currentPage: this.props.currentPage});
-    }
+
+    if (this.props.filterValue !== prevProps.filterValue) 
+      this.setState({filterValue: this.props.filterValue});
   }
 
   render() {
+    if (!Immutable.isImmutable(this.props.data)) {
+      console.error('Invalid prop data supplied to TableTable. Expected Immutable iterable.');
+      return (<div>INVALID DATA</div>);
+    }
+
     let headerComponents = [];
 
     this.props.columns.forEach((col,i) => {
@@ -78,8 +88,12 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
       }
     });
 
-    const skipRows: number = this.props.rowsPerPage * (this.state.currentPage - 1);
-    const takeRows: number = Math.min(this.props.rowsPerPage, this.props.data.count() - skipRows);
+    // If totalRows prop has been passed, then we are not using built in paging. Do not skip any rows.
+    let skipRows = 0;
+    if (!this.props.totalRows) 
+      skipRows = this.props.rowsPerPage * (this.state.currentPage - 1);
+
+    const takeRows: number = Math.min(this.props.rowsPerPage, this.props.data.size - skipRows);
 
     const rows = this.props.data.skip(skipRows).take(takeRows).map((row,index) => {
       // Create row context if required. Make it an immutable so nobody tries to abuse it by shoving stuff into it
@@ -118,8 +132,10 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
       );
     });
 
-    // Setup pager
-    const totalPages: number = Math.ceil(this.props.data.count() / this.props.rowsPerPage);
+    // Setup pager. If totalRows has been populated, use that, otherwise count passed in data
+    const totalRows = this.props.totalRows ? this.props.totalRows : this.props.data.size;
+
+    const totalPages: number = Math.ceil(totalRows / this.props.rowsPerPage);
 
     let pager: null | React$Element<{currentPage: number, displayPages: number, maxPage: number, onPageChange: (pageNumber: number) => void}> = null;
 
@@ -144,17 +160,16 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
 
     // Hide filter unless we have a search handler and showFilter is true
     const filterClasses = ClassNames('col-4 justify-content-end', {
-      'd-none': !this.props.onFilterAction || !this.props.showFilter
+      'd-none': !this.props.showFilter
     });
 
     const filterButtonClasses = ClassNames('btn btn-outline-secondary', {
-      'd-none': !this.props.onFilterAction,
       'd-none': !this.props.showFilter,
       'd-none': !this.props.onSearch,
     });
 
     const clearClasses: string = ClassNames('btn', 'btn-outline-secondary', 'btn-sm', {
-      'd-none': !this.state.filterValue || this.state.filterValue.length === 0
+      // 'd-none': !this.state.filterValue || this.state.filterValue.length === 0
     });
 
     const filterControl = this.props.showFilter
@@ -212,33 +227,30 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
     }
   }
 
-  // Update local state and call external onFilterAction if defined
+  // Update local state 
   handleFilterChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
-    // Reset to first page in case we end up with less pages than current page number
     this.setState({filterValue: e.target.value});
-    this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   }
 
   // Call external onSearch if pased
   handleSearchClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
-    this.props.onSearch && this.props.onSearch();
+    this.props.onSearch && this.props.onSearch(this.state.filterValue);
   }
 
   handleClearFilterClick(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     // Reset to first page to re-orient user
     this.setState({currentPage: 1, filterValue: ''});
-    this.props.onFilterAction && this.props.onFilterAction('');
-    this.props.onSearch && this.props.onSearch();
+    this.props.onClear && this.props.onClear();
   }
 
   handleKeyPress(e: SyntheticKeyboardEvent<*>) {
     if (e.key === 'Enter') {
       e.preventDefault();
       this.setState({currentPage: 1});
-      this.props.onSearch && this.props.onSearch();
+      this.props.onSearch && this.props.onSearch(this.state.filterValue);
     }
   }
 }
