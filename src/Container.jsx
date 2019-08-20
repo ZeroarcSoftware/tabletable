@@ -14,19 +14,22 @@ import type { Data, Columns, Row, Context } from './types';
 type Props = {
   columns: Columns,
   data: Data,
-  rowsPerPage: number,
   pagerSize: number,
+  rowsPerPage: number,
   showPager: bool,
   showFilter: bool,
   // Optional
+  currentPage?: number,
+  filterValue?: string,
+  pager?: any, // TODO WTH is the type for this
+  onClear?: () => void,
+  onSearch?: (searchText: string) => void,
+  onPageChange?: (page: number) => void,
   rowContext?: (Row,number) => any,
   rowCssClass?: (Row,number,Context) => string,
-  pager?: any, // TODO WTH is the type for this
-  onFilterAction?: (string) => void,
-  onSearch?: () => void,
-  filterValue?: string,
-  currentPage?: number,
-  onPageChange?: (page: number) => void,
+  showSpinner?: bool,
+  spinner?: *,
+  totalRows?: number,
 }
 
 type State = {
@@ -54,6 +57,8 @@ export default class TabletableContainer extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
+    if (!this.props.currentPage) return;
+
     if (this.props.currentPage !== prevProps.currentPage) 
       this.setState({currentPage: this.props.currentPage});
 
@@ -78,8 +83,12 @@ export default class TabletableContainer extends React.Component<Props, State> {
       }
     });
 
-    const skipRows: number = this.props.rowsPerPage * (this.state.currentPage - 1);
-    const takeRows: number = Math.min(this.props.rowsPerPage, this.props.data.count() - skipRows);
+    // If totalRows prop has been passed, then we are not using built in paging. Do not skip any rows.
+    let skipRows = 0;
+    if (!this.props.totalRows) 
+      skipRows = this.props.rowsPerPage * (this.state.currentPage - 1);
+
+    const takeRows: number = Math.min(this.props.rowsPerPage, this.props.data.size - skipRows);
 
     const rows = this.props.data.skip(skipRows).take(takeRows).map((row,index) => {
       // Create row context if required. Make it an immutable so nobody tries to abuse it by shoving stuff into it
@@ -118,8 +127,10 @@ export default class TabletableContainer extends React.Component<Props, State> {
       );
     });
 
-    // Setup pager
-    const totalPages: number = Math.ceil(this.props.data.count() / this.props.rowsPerPage);
+    // Setup pager. If totalRows has been populated, use that, otherwise count passed in data
+    const totalRows = this.props.totalRows ? this.props.totalRows : this.props.data.size;
+
+    const totalPages: number = Math.ceil(totalRows / this.props.rowsPerPage);
 
     let pager: null | React$Element<{currentPage: number, displayPages: number, maxPage: number, onPageChange: (pageNumber: number) => void}> = null;
 
@@ -144,11 +155,10 @@ export default class TabletableContainer extends React.Component<Props, State> {
 
     // Hide filter unless we have a search handler and showFilter is true
     const filterClasses = ClassNames({
-      hidden: !this.props.onFilterAction || !this.props.showFilter
+      hidden: !this.props.showFilter
     });
 
     const filterButtonClasses = ClassNames('btn btn-white', {
-      hidden: !this.props.onFilterAction,
       hidden: !this.props.showFilter,
       hidden: !this.props.onSearch,
     });
@@ -177,16 +187,21 @@ export default class TabletableContainer extends React.Component<Props, State> {
       <div className='tabletable'>
         {filterControl}
         {pager}
-        <table className='table table-striped table-bordered table-hover'>
-          <thead>
-            <tr>
-              {headerComponents}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.toList()}
-          </tbody>
-        </table>
+        {this.props.showSpinner ? (
+          this.props.spinner
+        ) : (
+            <table className='table table-striped table-bordered table-hover'>
+              <thead>
+                <tr>
+                  {headerComponents}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.toList()}
+              </tbody>
+            </table>
+          )
+        }
         {pager}
       </div>
     );
@@ -205,32 +220,30 @@ export default class TabletableContainer extends React.Component<Props, State> {
     }
   }
 
-  // Update local state and call external onFilterAction if defined
+  // Update local state 
   handleFilterChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     this.setState({filterValue: e.target.value});
-    this.props.onFilterAction && this.props.onFilterAction(e.target.value);
   }
 
   // Call external onSearch if pased
   handleSearchClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
-    this.props.onSearch && this.props.onSearch();
+    this.props.onSearch && this.props.onSearch(this.state.filterValue);
   }
 
   handleClearFilterClick(e: SyntheticInputEvent<*>) {
     e.preventDefault();
     // Reset to first page to re-orient user
     this.setState({currentPage: 1, filterValue: ''});
-    this.props.onFilterAction && this.props.onFilterAction('');
-    this.props.onSearch && this.props.onSearch();
+    this.props.onClear && this.props.onClear();
   }
 
   handleKeyPress(e: SyntheticKeyboardEvent<*>) {
     if (e.key === 'Enter') {
       e.preventDefault();
       this.setState({currentPage: 1});
-      this.props.onSearch && this.props.onSearch();
+      this.props.onSearch && this.props.onSearch(this.state.filterValue);
     }
   }
 }
