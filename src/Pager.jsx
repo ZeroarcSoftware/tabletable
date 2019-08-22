@@ -30,11 +30,18 @@ export default class TabletablePager extends React.Component<Props> {
       startIndex = endIndex - (this.props.displayPages - 1);
     }
 
-    for(let i = startIndex; i <= endIndex; i++){
-      const thisButtonClasses = ClassNames('btn', 'btn-outline-secondary', 'btn-sm', {
-        'label-success': this.props.currentPage === i
+    for (let i = startIndex; i <= endIndex; i++) {
+      const thisButtonClasses = ClassNames('btn', 'btn-sm', 'mx-1', {
+        'btn-outline-secondary': this.props.currentPage !== i,
+        'btn-primary': this.props.currentPage === i
       });
-      options.push(<button key={i} className={thisButtonClasses} data-value={i} onClick={this.pageChange}>{i}</button>);
+      options.push(
+        <button key={i} 
+        className={thisButtonClasses} 
+        style={{minWidth: '2.5em'}}
+        data-value={i} 
+        onClick={this.pageChange}>{i}</button>
+      );
     }
 
     return (
@@ -44,7 +51,7 @@ export default class TabletablePager extends React.Component<Props> {
         </div>
         <div className='col-6 text-center' role='group'> 
           <button className='btn btn-outline-secondary btn-sm' onClick={this.previousPageChange}><i className='far fa-chevron-left'></i> Prev</button>
-          <div className='mx-3' style={{display: 'inline-block'}}> 
+          <div className='mx-2' style={{display: 'inline-block'}}> 
             {options}
           </div>
           <button className='btn btn-outline-secondary btn-sm' onClick={this.nextPageChange}><i className='far fa-chevron-right'></i> Next</button>

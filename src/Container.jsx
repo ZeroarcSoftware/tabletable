@@ -199,17 +199,24 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
           {filterControl}
         </div>
         {pager}
-        <table className={this.props.tableCssClass}>
-          <thead>
-            <tr>
-              {headerComponents}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.toList()}
-          </tbody>
-        </table>
-        {pager}
+        {this.props.showSpinner ? (
+          this.props.spinner
+        ) : (
+            <>
+              <table className={this.props.tableCssClass}>
+                <thead>
+                  <tr>
+                    {headerComponents}
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.toList()}
+                </tbody>
+              </table>
+              {pager}
+            </>
+          )
+        }
       </div>
     );
   };
