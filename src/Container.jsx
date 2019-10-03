@@ -248,15 +248,19 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
 
   handleClearFilterClick(e: SyntheticInputEvent<*>) {
     e.preventDefault();
+    
     // Reset to first page to re-orient user
-    this.setState({currentPage: 1, filterValue: ''});
-    this.props.onClear && this.props.onClear();
+    if (this.state.filterValue) {
+      this.setState({filterValue: ''});
+      this.handlePageChange(1);
+      this.props.onClear && this.props.onClear();
+    }
   }
 
   handleKeyPress(e: SyntheticKeyboardEvent<*>) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.setState({currentPage: 1});
+      this.handlePageChange(1);
       this.props.onSearch && this.props.onSearch(this.state.filterValue);
     }
   }
