@@ -15,7 +15,7 @@ import Tabletable from './Container';
 import fakeData from '../test/fake_data.json';
 
 
-class Demo extends React.Component<*> {
+class Demo extends React.Component {
   render() {
     let immutableData = Immutable.fromJS(fakeData);
 
