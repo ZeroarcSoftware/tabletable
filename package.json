@@ -3,9 +3,10 @@
   "version": "2.8.2",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ && flow-copy-source -v src dist",
-    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ && flow-copy-source -v src dist",
+    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/",
+    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/",
     "demo-watch": "$(npm bin)/webpack -w",
     "demo-build": "$(npm bin)/webpack",
     "prepare": "npm run build",

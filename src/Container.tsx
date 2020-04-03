@@ -26,8 +26,8 @@ type Props = {
   onPageChange?: (page: number) => void,
   rowContext?: (Row, number) => any,
   rowCssClass?: (Row, number, Context) => string,
-  showSpinner?: bool,
-  spinner?: *,
+  showSpinner?: boolean,
+  spinner?: any,
   totalRows?: number,
 }
 
