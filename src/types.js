@@ -21,5 +21,3 @@ type Column = {
 };
 
 export type Columns = Array<Column>;
-
-qq;

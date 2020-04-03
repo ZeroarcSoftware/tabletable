@@ -8,15 +8,15 @@ import Autobind from 'autobind-decorator';
 
 // Local
 import Pager from './Pager';
-import type { Data, Columns, Row, Context } from './types';
+import type { Data, Columns, Row, Context } from './ts_types';
 
 type Props = {
   columns: Columns,
   data: Data,
   pagerSize: number,
   rowsPerPage: number,
-  showPager: bool,
-  showFilter: bool,
+  showPager: boolean,
+  showFilter: boolean,
   // Optional
   currentPage?: number,
   filterValue?: string,
@@ -42,8 +42,8 @@ export default class TabletableContainer extends React.Component<Props, State> {
   static defaultProps: {
     rowsPerPage: number,
     pagerSize: number,
-    showPager: bool,
-    showFilter: bool,
+    showPager: boolean,
+    showFilter: boolean,
   }
 
   constructor(props: Props) {
