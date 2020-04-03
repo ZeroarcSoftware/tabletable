@@ -3,7 +3,7 @@
 
 import Autobind from 'autobind-decorator';
 import ClassNames from 'classnames';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 
 type Props = {
   displayPages: number,
@@ -61,31 +61,31 @@ export default class TabletablePager extends React.Component<Props> {
   // Custom methods
   //
 
-  pageChange(e: SyntheticInputEvent<*>) {
+  pageChange(e: SyntheticEvent) {
     e.preventDefault();
     this.props.onPageChange(parseInt(e.target.getAttribute('data-value')));
   }
 
-  previousPageChange(e: SyntheticInputEvent<*>) {
+  previousPageChange(e: SyntheticEvent) {
     e.preventDefault();
     if (this.props.currentPage > 1) {
       this.props.onPageChange(this.props.currentPage - 1);
     }
   }
 
-  nextPageChange(e: SyntheticInputEvent<*>) {
+  nextPageChange(e: SyntheticEvent) {
     e.preventDefault();
     if (this.props.currentPage < this.props.maxPage) {
       this.props.onPageChange(this.props.currentPage + 1);
     }
   }
 
-  firstPageChange(e: SyntheticInputEvent<*>) {
+  firstPageChange(e: SyntheticEvent) {
     e.preventDefault();
     this.props.onPageChange(1);
   }
 
-  lastPageChange(e: SyntheticInputEvent<*>) {
+  lastPageChange(e: SyntheticEvent) {
     e.preventDefault();
     this.props.onPageChange(this.props.maxPage);
   }

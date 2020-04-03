@@ -1,14 +1,14 @@
 // Tabletable - Copyright 2017 Zeroarc Software, LLC
 'use strict';
 
-import React from 'react';
+import React, { Component, SyntheticEvent } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 import Autobind from 'autobind-decorator';
 
 // Local
 import Pager from './Pager';
-import type { Data, Columns, Row, Context } from './ts_types';
+import { Data, Columns, Row, Context } from './ts_types';
 
 type Props = {
   columns: Columns,
@@ -220,18 +220,18 @@ export default class TabletableContainer extends React.Component<Props, State> {
   }
 
   // Update local state
-  handleFilterChange(e: SyntheticInputEvent<*>) {
+  handleFilterChange(e: SyntheticEvent) {
     e.stopPropagation();
     this.setState({ filterValue: e.target.value });
   }
 
   // Call external onSearch if pased
-  handleSearchClick(e: SyntheticInputEvent<*>) {
+  handleSearchClick(e: SyntheticEvent) {
     e.stopPropagation();
     this.props.onSearch && this.props.onSearch(this.state.filterValue);
   }
 
-  handleClearFilterClick(e: SyntheticInputEvent<*>) {
+  handleClearFilterClick(e: SyntheticEvent) {
     e.preventDefault();
 
     // Reset to first page to re-orient user
@@ -242,7 +242,7 @@ export default class TabletableContainer extends React.Component<Props, State> {
     }
   }
 
-  handleKeyPress(e: SyntheticKeyboardEvent<*>) {
+  handleKeyPress(e: MouseEvent) {
     if (e.key === 'Enter') {
       e.preventDefault();
       this.handlePageChange(1);

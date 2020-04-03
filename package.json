@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/",
-    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/",
+    "check-types": "tsc",
+    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ --extensions '.ts,.tsx'",
     "demo-watch": "$(npm bin)/webpack -w",
     "demo-build": "$(npm bin)/webpack",
     "prepare": "npm run build",
@@ -52,6 +53,7 @@
     "react-dom": "^16.4.2"
   },
   "dependencies": {
+    "@types/classnames": "^2.2.10",
     "@types/react": "^16.9.32",
     "@types/react-dom": "^16.9.6",
     "autobind-decorator": "^2.4.0",
