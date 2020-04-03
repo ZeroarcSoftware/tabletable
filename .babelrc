@@ -1,13 +1,12 @@
 {
   "env": {
     "development": {
-      "plugins": [
-        "flow-react-proptypes"
-      ]
+      "plugins": ["flow-react-proptypes"]
     }
   },
   "presets": [
     "@babel/react",
+    "@babel/typescript",
     [
       "@babel/env",
       {
@@ -17,6 +16,7 @@
   ],
   "plugins": [
     "@babel/plugin-transform-flow-strip-types",
+    "@babel/plugin-proposal-object-rest-spread",
     [
       "@babel/plugin-proposal-decorators",
       {

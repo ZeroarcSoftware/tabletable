@@ -24,7 +24,7 @@ class Demo extends React.Component<*> {
         display: 'Index',
         headerCssClass: 'col-sm-1',
         visible: true,
-        data: (row,index,context) => <div>{index}</div>,
+        data: (row, index, context) => <div>{index}</div>,
       },
       {
         display: 'Name',

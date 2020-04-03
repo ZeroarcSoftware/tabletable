@@ -1,5 +1,4 @@
-//@flow
-// tabletable - Copyright 2017 Zeroarc Software, LLC
+// Tabletable - Copyright 2017 Zeroarc Software, LLC
 'use strict';
 
 import React from 'react';
@@ -28,8 +27,8 @@ type Props = {
   onClear?: () => void,
   onSearch?: (searchText: string) => void,
   onPageChange?: (page: number) => void,
-  rowContext?: (Row,number) => any,
-  rowCssClass?: (Row,number,Context) => string,
+  rowContext?: (Row, number) => any,
+  rowCssClass?: (Row, number, Context) => string,
   showSpinner?: bool,
   spinner?: *,
   totalRows?: number,
@@ -64,11 +63,11 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
   componentDidUpdate(prevProps: Props) {
     if (!this.props.currentPage) return;
 
-    if (this.props.currentPage !== prevProps.currentPage) 
-      this.setState({currentPage: this.props.currentPage});
+    if (this.props.currentPage !== prevProps.currentPage)
+      this.setState({ currentPage: this.props.currentPage });
 
-    if (this.props.filterValue !== prevProps.filterValue) 
-      this.setState({filterValue: this.props.filterValue});
+    if (this.props.filterValue !== prevProps.filterValue)
+      this.setState({ filterValue: this.props.filterValue });
   }
 
   render() {
@@ -79,7 +78,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
 
     let headerComponents = [];
 
-    this.props.columns.forEach((col,i) => {
+    this.props.columns.forEach((col, i) => {
       // If visible is false, hide the column. If visible is not defined, default to showing column
       if (typeof col.visible === 'undefined' || col.visible) {
         headerComponents.push(
@@ -90,37 +89,37 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
 
     // If totalRows prop has been passed, then we are not using built in paging. Do not skip any rows.
     let skipRows = 0;
-    if (!this.props.totalRows) 
+    if (!this.props.totalRows)
       skipRows = this.props.rowsPerPage * (this.state.currentPage - 1);
 
     const takeRows: number = Math.min(this.props.rowsPerPage, this.props.data.size - skipRows);
 
-    const rows = this.props.data.skip(skipRows).take(takeRows).map((row,index) => {
+    const rows = this.props.data.skip(skipRows).take(takeRows).map((row, index) => {
       // Create row context if required. Make it an immutable so nobody tries to abuse it by shoving stuff into it
       // during a column step. We will re-project from the Immutable each time it is used
-      const context = Immutable.fromJS(this.props.rowContext ? this.props.rowContext(row,index) : {});
+      const context = Immutable.fromJS(this.props.rowContext ? this.props.rowContext(row, index) : {});
 
       // Assign any row classes
       let rowCssClass = this.props.rowCssClass;
       if (typeof this.props.rowCssClass === 'function') {
-        rowCssClass = this.props.rowCssClass(row,index,context && context.toObject());
+        rowCssClass = this.props.rowCssClass(row, index, context && context.toObject());
         if (typeof rowCssClass !== 'string') console.error('rowCssClass function must return a string value. Was ' + typeof rowCssClass);
       }
 
       // Build out components for the row
       let rowComponents = [];
-      this.props.columns.forEach((col,i) => {
+      this.props.columns.forEach((col, i) => {
         // If visible is false, hide the column. If visible is not defined, default to showing column
         if (typeof col.visible === 'undefined' || col.visible) {
           // elementCssClass can either be a string or a function that returns a string
           let elementCssClass = col.elementCssClass;
           if (typeof col.elementCssClass === 'function') {
-            elementCssClass = col.elementCssClass(row,index,context && context.toObject());
+            elementCssClass = col.elementCssClass(row, index, context && context.toObject());
             if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
           }
 
           rowComponents.push(
-            <td key={`${index}-${i}`} className={elementCssClass}>{col.data(row,index,context && context.toObject())}</td>
+            <td key={`${index}-${i}`} className={elementCssClass}>{col.data(row, index, context && context.toObject())}</td>
           );
         }
       });
@@ -137,7 +136,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
 
     const totalPages: number = Math.ceil(totalRows / this.props.rowsPerPage);
 
-    let pager: null | React$Element<{currentPage: number, displayPages: number, maxPage: number, onPageChange: (pageNumber: number) => void}> = null;
+    let pager: null | React$Element<{ currentPage: number, displayPages: number, maxPage: number, onPageChange: (pageNumber: number) => void }> = null;
 
     if (this.props.showPager) {
       // Check for custom pager and use it
@@ -173,20 +172,19 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
     });
 
     const filterControl = this.props.showFilter
-      ? (
-        <div className={filterClasses}>
-          <div className='input-group'>
-            <button className={clearClasses} style={{ position: 'absolute', right: '45px', top: '3px', zIndex: 10 }} onClick={this.handleClearFilterClick}>
-              <i className='far fa-fw fa-times'></i> Clear
+      ? <div className={filterClasses}>
+        <div className='input-group col-xs-4 col-xs-offset-8'>
+          <button className={clearClasses} style={{ position: 'absolute', right: '45px', top: '6px', zIndex: 10 }} onClick={this.handleClearFilterClick}>
+            <i className='fa fa-times'></i> Clear
           </button>
-            <input type='text' className='form-control' placeholder='Type to filter' value={this.state.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
-            <div className="input-group-append">
-              <button className={filterButtonClasses} onClick={this.handleSearchClick}>
-                <i className='far fa-search'></i>
-              </button>
-            </div>
+          <input type='text' className='form-control' placeholder='Type to filter' value={this.state.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
+          <div className="input-group-append">
+            <button className={filterButtonClasses} onClick={this.handleSearchClick}>
+              <i className='far fa-search'></i>
+            </button>
           </div>
         </div>
+      </div>
       )
       : '';
 
@@ -230,14 +228,14 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
       this.props.onPageChange(pageNumber);
     }
     else {
-      this.setState({currentPage: pageNumber});
+      this.setState({ currentPage: pageNumber });
     }
   }
 
-  // Update local state 
+  // Update local state
   handleFilterChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
-    this.setState({filterValue: e.target.value});
+    this.setState({ filterValue: e.target.value });
   }
 
   // Call external onSearch if pased
@@ -248,10 +246,10 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
 
   handleClearFilterClick(e: SyntheticInputEvent<*>) {
     e.preventDefault();
-    
+
     // Reset to first page to re-orient user
     if (this.state.filterValue) {
-      this.setState({filterValue: ''});
+      this.setState({ filterValue: '' });
       this.handlePageChange(1);
       this.props.onClear && this.props.onClear();
     }

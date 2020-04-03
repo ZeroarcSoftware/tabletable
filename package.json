@@ -46,6 +46,8 @@
     "react-dom": "^16.4.2"
   },
   "dependencies": {
+    "@types/react": "^16.9.32",
+    "@types/react-dom": "^16.9.6",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.5",
     "immutable": "^4.0.0-rc.12",
