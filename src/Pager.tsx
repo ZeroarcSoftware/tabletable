@@ -1,5 +1,4 @@
-// @flow
-// tabletable - Copyright 2018 Zeroarc Software, LLC
+// Tabletable - Copyright 2018 Zeroarc Software, LLC
 'use strict';
 
 import Autobind from 'autobind-decorator';
@@ -30,7 +29,7 @@ export default class TabletablePager extends React.Component<Props> {
       startIndex = endIndex - (this.props.displayPages - 1);
     }
 
-    for(let i = startIndex; i <= endIndex; i++){
+    for (let i = startIndex; i <= endIndex; i++) {
       const thisButtonClasses = ClassNames('btn', 'btn-white', 'btn-sm', {
         'label-success': this.props.currentPage === i
       });
@@ -38,20 +37,20 @@ export default class TabletablePager extends React.Component<Props> {
     }
 
     return (
-      <div className='btn-toolbar text-center' role='toolbar' style={{marginTop: '20px', marginBottom: '20px'}} >
+      <div className='btn-toolbar text-center' role='toolbar' style={{ marginTop: '20px', marginBottom: '20px' }} >
         <div className='btn-group pull-left' role='group'>
           <button className='btn btn-white btn-sm' onClick={this.firstPageChange}><i className='fa fa-step-backward'></i> First</button>
         </div>
         <div className='btn-group pull-right' role='group'>
           <button className='btn btn-white primary btn-sm' onClick={this.lastPageChange}><i className='fa fa-step-forward'></i> Last</button>
         </div>
-        <div className='btn-group' role='group' style={{float:'none'}}>
+        <div className='btn-group' role='group' style={{ float: 'none' }}>
           <button className='btn btn-white primary btn-sm' onClick={this.previousPageChange}><i className='fa fa-chevron-left'></i> Prev</button>
         </div>
-        <div className='btn-group' role='group' style={{float:'none'}}>
+        <div className='btn-group' role='group' style={{ float: 'none' }}>
           {options}
         </div>
-        <div className='btn-group' role='group' style={{float:'none'}}>
+        <div className='btn-group' role='group' style={{ float: 'none' }}>
           <button className='btn btn-white primary btn-sm' onClick={this.nextPageChange}><i className='fa fa-chevron-right'></i> Next</button>
         </div>
       </div>
