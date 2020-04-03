@@ -15,8 +15,8 @@ export type Context = Immutable.Map<any, any> | Immutable.List<any>;
 type Column = {
   display: string,
   headerCssClass?: string,
-  elementCssClass?: (Row, number, Context) => string,
-  data: (Row, number, Context) => ReactElement<*>,
+  elementCssClass?: (Row: any, number: number, Context: any) => string,
+  data: (Row: any, number: number, Context: any) => React.ReactNode,
   visible: boolean,
 };
 
