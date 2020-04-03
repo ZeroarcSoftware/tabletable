@@ -8,7 +8,7 @@ import Autobind from 'autobind-decorator';
 
 // Local
 import Pager from './Pager';
-import type { Data, Columns, Row, Context } from './types';
+import type { Data, Columns, Row, Context } from './ts_types';
 
 type Props = {
   columns: Columns,
