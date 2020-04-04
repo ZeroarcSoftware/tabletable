@@ -1,7 +1,7 @@
 // Tabletable - Copyright 2017 Zeroarc Software, LLC
 'use strict';
 
-import React, { Component, SyntheticEvent } from 'react';
+import React, { ReactElement, SyntheticEvent } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 import Autobind from 'autobind-decorator';
@@ -12,14 +12,14 @@ import { Data, Columns, Row, Context } from './ts_types';
 
 type Props = {
   columns: Columns,
+  containerCssClass: string,
   data: Data,
   pagerSize: number,
   rowsPerPage: number,
-  showPager: bool,
-  showFilter: bool,
-  showPager: bool,
+  showFilter: boolean,
+  showPager: boolean,
   tableCssClass: string,
-  containerCssClass: string,
+
   // Optional
   currentPage?: number,
   filterValue?: string,
@@ -45,8 +45,8 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
   static defaultProps: {
     containerCssClass: string,
     pagerSize: number,
-    showPager: bool,
-    showFilter: bool,
+    showPager: boolean,
+    showFilter: boolean,
     tableCssClass: string,
     rowsPerPage: number,
   }
@@ -136,7 +136,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
 
     const totalPages: number = Math.ceil(totalRows / this.props.rowsPerPage);
 
-    let pager: null | React$Element<{ currentPage: number, displayPages: number, maxPage: number, onPageChange: (pageNumber: number) => void }> = null;
+    let pager: null | ReactElement<{ currentPage: number, displayPages: number, maxPage: number, onPageChange: (pageNumber: number) => void }> = null;
 
     if (this.props.showPager) {
       // Check for custom pager and use it
@@ -172,19 +172,20 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
     });
 
     const filterControl = this.props.showFilter
-      ? <div className={filterClasses}>
-        <div className='input-group col-xs-4 col-xs-offset-8'>
-          <button className={clearClasses} style={{ position: 'absolute', right: '45px', top: '6px', zIndex: 10 }} onClick={this.handleClearFilterClick}>
-            <i className='fa fa-times'></i> Clear
+      ? (
+        <div className={filterClasses}>
+          <div className='input-group'>
+            <button className={clearClasses} style={{ position: 'absolute', right: '45px', top: '3px', zIndex: 10 }} onClick={this.handleClearFilterClick}>
+              <i className='far fa-fw fa-times'></i> Clear
           </button>
-          <input type='text' className='form-control' placeholder='Type to filter' value={this.state.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
-          <div className="input-group-append">
-            <button className={filterButtonClasses} onClick={this.handleSearchClick}>
-              <i className='far fa-search'></i>
-            </button>
+            <input type='text' className='form-control' placeholder='Type to filter' value={this.state.filterValue} onChange={this.handleFilterChange} onKeyPress={this.handleKeyPress} />
+            <div className="input-group-append">
+              <button className={filterButtonClasses} onClick={this.handleSearchClick}>
+                <i className='far fa-search'></i>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       )
       : '';
 

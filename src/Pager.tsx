@@ -43,9 +43,9 @@ export default class TabletablePager extends React.Component<Props> {
     }
 
     return (
-      <div className='btn-toolbar text-center' role='toolbar' style={{ marginTop: '20px', marginBottom: '20px' }} >
-        <div className='btn-group pull-left' role='group'>
-          <button className='btn btn-white btn-sm' onClick={this.firstPageChange}><i className='fa fa-step-backward'></i> First</button>
+      <div className='row btn-toolbar my-3' role='toolbar'>
+        <div className='col-3' role='group'>
+          <button className='btn btn-outline-secondary btn-sm' onClick={this.firstPageChange}><i className='far fa-step-backward'></i> First</button>
         </div>
         <div className='col-6 text-center' role='group'>
           <button className='btn btn-outline-secondary btn-sm' onClick={this.previousPageChange}><i className='far fa-chevron-left'></i> Prev</button>
@@ -54,14 +54,9 @@ export default class TabletablePager extends React.Component<Props> {
           </div>
           <button className='btn btn-outline-secondary btn-sm' onClick={this.nextPageChange}><i className='far fa-chevron-right'></i> Next</button>
         </div>
-        <div className='btn-group' role='group' style={{ float: 'none' }}>
-          <button className='btn btn-white primary btn-sm' onClick={this.previousPageChange}><i className='fa fa-chevron-left'></i> Prev</button>
-        </div>
-        <div className='btn-group' role='group' style={{ float: 'none' }}>
-          {options}
-        </div>
-        <div className='btn-group' role='group' style={{ float: 'none' }}>
-          <button className='btn btn-white primary btn-sm' onClick={this.nextPageChange}><i className='fa fa-chevron-right'></i> Next</button>
+
+        <div className='col-3 text-right' role='group'>
+          <button className='btn btn-outline-secondary btn-sm' onClick={this.lastPageChange}><i className='far fa-step-forward'></i> Last</button>
         </div>
       </div>
     )
