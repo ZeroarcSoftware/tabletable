@@ -3,100 +3,86 @@
 
 import Autobind from 'autobind-decorator';
 import ClassNames from 'classnames';
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, FunctionComponent } from 'react';
 
 type Props = {
   displayPages: number,
-  maxPage: number,
-  currentPage: number,
+  maxPage: number, // 1
+  currentPage: number, // 1
   onPageChange: (page: number) => void
 };
 
-@Autobind
-export default class TabletablePager extends React.Component<Props> {
-  static defaultProps: {
-    maxPage: number,
-    currentPage: number,
+const TabletablePager: FunctionComponent<Props> = ({ displayPages, maxPage, currentPage, onPageChange }) => {
+
+  const pageChange = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onPageChange(parseInt(e.target.getAttribute('data-value')));
   }
 
-  render() {
-    let options = [];
-
-    let startIndex = Math.max(this.props.currentPage - Math.floor(this.props.displayPages / 2), 1);
-    const endIndex = Math.min(startIndex + (this.props.displayPages - 1), this.props.maxPage);
-
-    if (this.props.maxPage >= this.props.displayPages && (endIndex - startIndex) <= this.props.displayPages) {
-      startIndex = endIndex - (this.props.displayPages - 1);
+  const previousPageChange = (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
     }
+  }
 
-    for (let i = startIndex; i <= endIndex; i++) {
-      const thisButtonClasses = ClassNames('btn', 'btn-white', 'btn-sm', {
-        'label-success': this.props.currentPage === i
-      });
-      options.push(
-        <button key={i}
-          className={thisButtonClasses}
-          style={{ minWidth: '2.5em' }}
-          data-value={i}
-          onClick={this.pageChange}>{i}</button>
-      );
+  const nextPageChange = (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (currentPage < maxPage) {
+      onPageChange(currentPage + 1);
     }
+  }
 
-    return (
-      <div className='row btn-toolbar my-3' role='toolbar'>
-        <div className='col-3' role='group'>
-          <button className='btn btn-outline-secondary btn-sm' onClick={this.firstPageChange}><i className='far fa-step-backward'></i> First</button>
-        </div>
-        <div className='col-6 text-center' role='group'>
-          <button className='btn btn-outline-secondary btn-sm' onClick={this.previousPageChange}><i className='far fa-chevron-left'></i> Prev</button>
-          <div className='mx-2' style={{ display: 'inline-block' }}>
-            {options}
-          </div>
-          <button className='btn btn-outline-secondary btn-sm' onClick={this.nextPageChange}><i className='far fa-chevron-right'></i> Next</button>
-        </div>
+  const firstPageChange = (e: SyntheticEvent) => {
+    e.preventDefault();
+    onPageChange(1);
+  }
 
-        <div className='col-3 text-right' role='group'>
-          <button className='btn btn-outline-secondary btn-sm' onClick={this.lastPageChange}><i className='far fa-step-forward'></i> Last</button>
-        </div>
+  const lastPageChange = (e: SyntheticEvent) => {
+    e.preventDefault();
+    onPageChange(maxPage);
+  }
+
+  let options = [];
+
+  let startIndex = Math.max(currentPage - Math.floor(displayPages / 2), 1);
+  const endIndex = Math.min(startIndex + (displayPages - 1), maxPage);
+
+  if (maxPage >= displayPages && (endIndex - startIndex) <= displayPages) {
+    startIndex = endIndex - (displayPages - 1);
+  }
+
+  for (let i = startIndex; i <= endIndex; i++) {
+    const thisButtonClasses = ClassNames('btn', 'btn-white', 'btn-sm', {
+      'label-success': currentPage === i
+    });
+    options.push(
+      <button key={i}
+        className={thisButtonClasses}
+        style={{ minWidth: '2.5em' }}
+        data-value={i}
+        onClick={pageChange}>{i}</button>
+    );
+  }
+
+  return (
+    <div className='row btn-toolbar my-3' role='toolbar'>
+      <div className='col-3' role='group'>
+        <button className='btn btn-outline-secondary btn-sm' onClick={firstPageChange}><i className='far fa-step-backward'></i> First</button>
       </div>
-    )
-  }
+      <div className='col-6 text-center' role='group'>
+        <button className='btn btn-outline-secondary btn-sm' onClick={previousPageChange}><i className='far fa-chevron-left'></i> Prev</button>
+        <div className='mx-2' style={{ display: 'inline-block' }}>
+          {options}
+        </div>
+        <button className='btn btn-outline-secondary btn-sm' onClick={nextPageChange}><i className='far fa-chevron-right'></i> Next</button>
+      </div>
 
-  //
-  // Custom methods
-  //
-
-  pageChange(e: SyntheticEvent) {
-    e.preventDefault();
-    this.props.onPageChange(parseInt(e.target.getAttribute('data-value')));
-  }
-
-  previousPageChange(e: SyntheticEvent) {
-    e.preventDefault();
-    if (this.props.currentPage > 1) {
-      this.props.onPageChange(this.props.currentPage - 1);
-    }
-  }
-
-  nextPageChange(e: SyntheticEvent) {
-    e.preventDefault();
-    if (this.props.currentPage < this.props.maxPage) {
-      this.props.onPageChange(this.props.currentPage + 1);
-    }
-  }
-
-  firstPageChange(e: SyntheticEvent) {
-    e.preventDefault();
-    this.props.onPageChange(1);
-  }
-
-  lastPageChange(e: SyntheticEvent) {
-    e.preventDefault();
-    this.props.onPageChange(this.props.maxPage);
-  }
-}
-
-TabletablePager.defaultProps = {
-  maxPage: 1,
-  currentPage: 1,
+      <div className='col-3 text-right' role='group'>
+        <button className='btn btn-outline-secondary btn-sm' onClick={lastPageChange}><i className='far fa-step-forward'></i> Last</button>
+      </div>
+    </div>
+  );
 };
+
+export default TabletablePager;

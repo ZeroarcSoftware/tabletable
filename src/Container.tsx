@@ -22,7 +22,7 @@ type Props = {
 
   // Optional
   currentPage?: number,
-  filterValue?: string,
+  filterValue?: string | undefined,
   pager?: any, // TODO WTH is the type for this
   onClear?: () => void,
   onSearch?: (searchText: string) => void,
@@ -149,10 +149,12 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
       }
       else {
         // Use default pager
-        pager = <Pager onPageChange={this.handlePageChange}
-          displayPages={this.props.pagerSize}
-          maxPage={totalPages}
-          currentPage={this.state.currentPage} />
+        pager =
+          <Pager
+            onPageChange={this.handlePageChange}
+            displayPages={this.props.pagerSize}
+            maxPage={totalPages}
+            currentPage={this.state.currentPage} />
       }
     }
 
@@ -232,7 +234,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
   }
 
   // Update local state
-  handleFilterChange(e: SyntheticEvent) {
+  handleFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.stopPropagation();
     this.setState({ filterValue: e.target.value });
   }

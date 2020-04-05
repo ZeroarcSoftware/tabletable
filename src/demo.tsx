@@ -30,17 +30,17 @@ class Demo extends React.Component {
       {
         display: 'Name',
         headerCssClass: 'col-sm-4',
-        data: row => <div>{row.get('name')}</div>,
+        data: (row: Row) => <div>{row.get('name')}</div>,
       },
       {
         display: 'Skill',
         headerCssClass: 'col-sm-4',
-        data: row => <div>{row.get('skill')}</div>,
+        data: (row: Row) => <div>{row.get('skill')}</div>,
       },
       {
         display: 'Favorite Color',
         headerCssClass: 'col-sm-3',
-        data: row => <div>{row.get('color')}</div>,
+        data: (row: Row) => <div>{row.get('color')}</div>,
       }
     ];
 
