@@ -6,13 +6,14 @@
 'use strict';
 
 // External
-const React = require('react');
-const ReactDOM = require('react-dom');
-const Immutable = require('immutable');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Immutable from 'immutable';
 
 // Local
 import Tabletable from './Container';
 import fakeData from '../test/fake_data.json';
+import { Data, Columns, Row, Context } from './ts_types';
 
 
 class Demo extends React.Component {
@@ -24,7 +25,7 @@ class Demo extends React.Component {
         display: 'Index',
         headerCssClass: 'col-sm-1',
         visible: true,
-        data: (row, index, context) => <div>{index}</div>,
+        data: (row: Row, index: number, context: Context) => <div>{index}</div>,
       },
       {
         display: 'Name',

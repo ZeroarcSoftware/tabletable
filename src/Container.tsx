@@ -1,7 +1,7 @@
 // Tabletable - Copyright 2017 Zeroarc Software, LLC
 'use strict';
 
-import React, { ReactElement, SyntheticEvent } from 'react';
+import React, { ReactElement, SyntheticEvent, MouseEvent } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 import Autobind from 'autobind-decorator';
@@ -27,8 +27,8 @@ type Props = {
   onClear?: () => void,
   onSearch?: (searchText: string) => void,
   onPageChange?: (page: number) => void,
-  rowContext?: (Row, number) => any,
-  rowCssClass?: (Row, number, Context) => string,
+  rowContext?: (Row: Row, number: number) => any,
+  rowCssClass?: (Row: Row, number: number, Context: Context) => any,
   showSpinner?: boolean,
   spinner?: any,
   totalRows?: number,
@@ -36,9 +36,8 @@ type Props = {
 
 type State = {
   currentPage: number,
-  filterValue: string,
+  filterValue: string | undefined,
 }
-
 
 @Autobind
 export default class TabletableContainer extends React.PureComponent<Props, State> {
@@ -76,7 +75,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
       return (<div>INVALID DATA</div>);
     }
 
-    let headerComponents = [];
+    let headerComponents: JSX.Element[] = [];
 
     this.props.columns.forEach((col, i) => {
       // If visible is false, hide the column. If visible is not defined, default to showing column
@@ -107,12 +106,12 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
       }
 
       // Build out components for the row
-      let rowComponents = [];
+      let rowComponents: JSX.Element[] = [];
       this.props.columns.forEach((col, i) => {
         // If visible is false, hide the column. If visible is not defined, default to showing column
         if (typeof col.visible === 'undefined' || col.visible) {
           // elementCssClass can either be a string or a function that returns a string
-          let elementCssClass = col.elementCssClass;
+          let elementCssClass: any = col.elementCssClass;
           if (typeof col.elementCssClass === 'function') {
             elementCssClass = col.elementCssClass(row, index, context && context.toObject());
             if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
@@ -163,8 +162,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
     });
 
     const filterButtonClasses = ClassNames('btn btn-outline-secondary', {
-      'd-none': !this.props.showFilter,
-      'd-none': !this.props.onSearch,
+      'd-none': !this.props.showFilter || !this.props.onSearch,
     });
 
     const clearClasses: string = ClassNames('btn', 'btn-outline-secondary', 'btn-sm', {
@@ -256,7 +254,7 @@ export default class TabletableContainer extends React.PureComponent<Props, Stat
     }
   }
 
-  handleKeyPress(e: MouseEvent) {
+  handleKeyPress(e: SyntheticEvent) {
     if (e.key === 'Enter') {
       e.preventDefault();
       this.handlePageChange(1);
