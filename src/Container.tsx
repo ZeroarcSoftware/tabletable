@@ -4,7 +4,15 @@
 import React, { ReactElement, SyntheticEvent, MouseEvent, FunctionComponent } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
-import Autobind from 'autobind-decorator';
+// Fonts
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSort, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons'
+library.add(
+  faSort,
+  faTimes,
+  faSearch,
+);
 
 // Local
 import Pager from './Pager';
@@ -26,11 +34,13 @@ type Props = {
   pager?: any, // TODO WTH is the type for this
   onClear?: () => void,
   onSearch?: (searchText: string) => void,
+  onSort?: (key: string, direction: string) => void,
   onPageChange?: (page: number) => void,
   rowContext?: (Row: Row, number: number) => any,
   rowCssClass?: (Row: Row, number: number, Context: Context) => any,
   showSpinner?: boolean,
   spinner?: any,
+  sortCriteria?: { key: string, direction: string },
   totalRows?: number,
 }
 
@@ -44,6 +54,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   onClear,
   onPageChange,
   onSearch,
+  onSort,
   pagerSize = 10,
   rowContext,
   rowCssClass,
@@ -52,6 +63,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   showFilter = false,
   showSpinner,
   spinner,
+  sortCriteria,
   tableCssClass = 'table table-striped table-bordered table-hover',
   totalRows,
 }) => {
@@ -78,6 +90,22 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const handleSearchClick = (e: SyntheticEvent) => {
     e.stopPropagation();
     onSearch // && onSearch(this.state.filterValue);
+  }
+
+  // Call external onSort, pass column key pressed.
+  const handleSortClick = (columnKey: string) => {
+    // Check to see if the column clicked is the one we initalized
+    // If so change direction, if not update sortCriteria with new sort, defualt to 'asc'
+    let direction = 'asc';
+    if (sortCriteria !== undefined && sortCriteria.key == columnKey) {
+      // Reversing current sort.
+      direction = sortCriteria.direction === 'asc' ? 'desc' : 'asc';
+      onSort!(columnKey, direction);
+    }
+    else {
+      // Sorting new column
+      onSort!(columnKey, direction);
+    }
   }
 
   const handleClearFilterClick = (e: SyntheticEvent) => {
@@ -107,10 +135,17 @@ const TabletableContainer: FunctionComponent<Props> = ({
   let headerComponents: JSX.Element[] = [];
 
   columns.forEach((col, i) => {
-    // If visible is false, hide the column. If visible is not defined, default to showing column
+    // If visible is false, hide the column. If visible is not defined, default to showing column.
     if (typeof col.visible === 'undefined' || col.visible) {
+      let sortIcon: JSX.Element | null = null;
+      let sortAction: boolean = false;
+      // Add icon/action if column is sortable.
+      if (col.sortable) {
+        sortIcon = <FontAwesomeIcon icon={['fas', 'sort']} fixedWidth />;
+        sortAction = true;
+      }
       headerComponents.push(
-        <th key={`th-${i}`} className={col.headerCssClass}>{col.display || ''}</th>
+        <th key={`th-${i}`} onClick={sortAction ? () => handleSortClick(col.key) : null} data-column={col.key} className={col.headerCssClass}>{col.display || ''}{sortIcon}</th>
       );
     }
   });
@@ -203,12 +238,12 @@ const TabletableContainer: FunctionComponent<Props> = ({
       <div className={filterClasses}>
         <div className='input-group'>
           <button className={clearClasses} style={{ position: 'absolute', right: '45px', top: '3px', zIndex: 10 }} onClick={handleClearFilterClick}>
-            <i className='far fa-fw fa-times'></i> Clear
+            <FontAwesomeIcon icon={['fas', 'times']} fixedWidth /> Clear
           </button>
           <input type='text' className='form-control' placeholder='Type to filter' value={filterValue} onChange={handleFilterChange} onKeyPress={handleKeyPress} />
           <div className="input-group-append">
             <button className={filterButtonClasses} onClick={handleSearchClick}>
-              <i className='far fa-search'></i>
+              <FontAwesomeIcon icon={['fas', 'search']} fixedWidth />
             </button>
           </div>
         </div>
