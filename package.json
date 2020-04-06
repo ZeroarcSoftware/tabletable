@@ -1,11 +1,13 @@
 {
   "name": "tabletable",
-  "version": "3.3.0",
+  "version": "4.0.0",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ && flow-copy-source -v src dist",
-    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ && flow-copy-source -v src dist",
+    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ --extensions '.ts,.tsx'",
+    "check-types": "tsc",
+    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ --extensions '.ts,.tsx'",
     "demo-watch": "$(npm bin)/webpack -w",
     "demo-build": "$(npm bin)/webpack",
     "prepare": "npm run build",
@@ -33,19 +35,23 @@
     "@babel/plugin-transform-flow-strip-types": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^8.0.5",
-    "babel-plugin-flow-react-proptypes": "^25.0.0",
-    "flow-bin": "^0.95.1",
-    "flow-copy-source": "^2.0.3",
-    "flow-typed": "^2.5.2",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "@babel/preset-typescript": "^7.9.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-flow-react-proptypes": "^24.0.0",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.1.0"
   },
   "peerDependencies": {
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
   },
   "dependencies": {
+    "@types/classnames": "^2.2.10",
+    "@types/react": "^16.9.32",
+    "@types/react-dom": "^16.9.6",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.5",
     "immutable": "^4.0.0-rc.12",
