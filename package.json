@@ -1,11 +1,11 @@
 {
   "name": "tabletable",
-  "version": "2.8.2",
+  "version": "4.0.0",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/",
+    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ --extensions '.ts,.tsx'",
     "check-types": "tsc",
     "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ --extensions '.ts,.tsx'",
     "demo-watch": "$(npm bin)/webpack -w",
@@ -38,9 +38,6 @@
     "@babel/preset-typescript": "^7.9.0",
     "babel-loader": "^7.1.4",
     "babel-plugin-flow-react-proptypes": "^24.0.0",
-    "flow-bin": "^0.78.0",
-    "flow-copy-source": "^2.0.2",
-    "flow-typed": "^2.4.0",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
