@@ -1,18 +1,21 @@
 // Tabletable - Copyright 2018 Zeroarc Software, LLC
 'use strict';
 
-import Autobind from 'autobind-decorator';
 import ClassNames from 'classnames';
 import React, { SyntheticEvent, FunctionComponent } from 'react';
 
 type Props = {
   displayPages: number,
-  maxPage: number, // 1
-  currentPage: number, // 1
+  maxPage: number,
+  currentPage: number,
   onPageChange: (page: number) => void
 };
 
-const TabletablePager: FunctionComponent<Props> = ({ displayPages, maxPage, currentPage, onPageChange }) => {
+const TabletablePager: FunctionComponent<Props> = ({
+  displayPages,
+  maxPage = 1,
+  currentPage = 1,
+  onPageChange }) => {
 
   const pageChange = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
