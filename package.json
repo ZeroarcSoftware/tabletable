@@ -1,11 +1,13 @@
 {
   "name": "tabletable",
-  "version": "2.8.2",
+  "version": "4.0.0",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ && flow-copy-source -v src dist",
-    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ && flow-copy-source -v src dist",
+    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ --extensions '.ts,.tsx'",
+    "check-types": "tsc",
+    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ --extensions '.ts,.tsx'",
     "demo-watch": "$(npm bin)/webpack -w",
     "demo-build": "$(npm bin)/webpack",
     "prepare": "npm run build",
@@ -26,19 +28,20 @@
   },
   "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.4",
-    "@babel/plugin-proposal-class-properties": "^7.3.4",
-    "@babel/plugin-proposal-decorators": "^7.3.0",
-    "@babel/plugin-transform-flow-strip-types": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-decorators": "^7.4.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.9.0",
     "babel-loader": "^7.1.4",
     "babel-plugin-flow-react-proptypes": "^24.0.0",
-    "flow-bin": "^0.78.0",
-    "flow-copy-source": "^2.0.2",
-    "flow-typed": "^2.4.0",
-    "webpack": "^4.16.5",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
     "webpack-cli": "^3.1.0"
   },
   "peerDependencies": {
@@ -46,10 +49,13 @@
     "react-dom": "^16.4.2"
   },
   "dependencies": {
+    "@types/classnames": "^2.2.10",
+    "@types/react": "^16.9.32",
+    "@types/react-dom": "^16.9.6",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.5",
     "immutable": "^4.0.0-rc.12",
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   }
 }

@@ -26947,50 +26947,46 @@ var TabletablePager = (0, _autobindDecorator2.default)(_class = (_temp = _class2
 
       return _react2.default.createElement(
         'div',
-        { className: 'btn-toolbar text-center', role: 'toolbar', style: { marginTop: '20px', marginBottom: '20px' } },
+        { className: 'row btn-toolbar my-3', role: 'toolbar' },
         _react2.default.createElement(
           'div',
-          { className: 'btn-group pull-left', role: 'group' },
+          { className: 'col-3', role: 'group' },
           _react2.default.createElement(
             'button',
             { className: 'btn btn-white btn-sm', onClick: this.firstPageChange },
-            _react2.default.createElement('i', { className: 'fa fa-step-backward' }),
+            _react2.default.createElement('i', { className: 'far fa-step-backward' }),
             ' First'
           )
         ),
         _react2.default.createElement(
           'div',
-          { className: 'btn-group pull-right', role: 'group' },
-          _react2.default.createElement(
-            'button',
-            { className: 'btn btn-white primary btn-sm', onClick: this.lastPageChange },
-            _react2.default.createElement('i', { className: 'fa fa-step-forward' }),
-            ' Last'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'btn-group', role: 'group', style: { float: 'none' } },
+          { className: 'col-6 text-center', role: 'group' },
           _react2.default.createElement(
             'button',
             { className: 'btn btn-white primary btn-sm', onClick: this.previousPageChange },
-            _react2.default.createElement('i', { className: 'fa fa-chevron-left' }),
+            _react2.default.createElement('i', { className: 'far fa-chevron-left' }),
             ' Prev'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'mx-3', style: { display: 'inline-block' } },
+            options
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-white primary btn-sm', onClick: this.nextPageChange },
+            _react2.default.createElement('i', { className: 'far fa-chevron-right' }),
+            ' Next'
           )
         ),
         _react2.default.createElement(
           'div',
-          { className: 'btn-group', role: 'group', style: { float: 'none' } },
-          options
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'btn-group', role: 'group', style: { float: 'none' } },
+          { className: 'col-3 text-right', role: 'group' },
           _react2.default.createElement(
             'button',
-            { className: 'btn btn-white primary btn-sm', onClick: this.nextPageChange },
-            _react2.default.createElement('i', { className: 'fa fa-chevron-right' }),
-            ' Next'
+            { className: 'btn btn-white primary btn-sm', onClick: this.lastPageChange },
+            _react2.default.createElement('i', { className: 'far fa-step-forward' }),
+            ' Last'
           )
         )
       );
