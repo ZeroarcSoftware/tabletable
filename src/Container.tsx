@@ -1,4 +1,4 @@
-// Tabletable - Copyright 2017 Zeroarc Software, LLC
+// Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
 import React, { ReactElement, SyntheticEvent, MouseEvent, FunctionComponent } from 'react';
@@ -28,7 +28,7 @@ type Props = {
   onSearch?: (searchText: string) => void,
   onPageChange?: (page: number) => void,
   rowContext?: (Row: Row, number: number) => any,
-  rowCssClass?: (Row: Row, number: number, Context: Context) => any,
+  rowCssClass?: (Row: Row, number: number, Context: Context) => string | string,
   showSpinner?: boolean,
   spinner?: any,
   totalRows?: number,
@@ -46,7 +46,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   onSearch,
   pagerSize = 10,
   rowContext,
-  rowCssClass,
+  rowCssClass = '',
   rowsPerPage = 5,
   showPager = true,
   showFilter = false,
@@ -75,7 +75,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   }
 
   // Call external onSearch if pased
-  const handleSearchClick = (e: SyntheticEvent) => {
+  const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onSearch // && onSearch(this.state.filterValue);
   }
@@ -91,7 +91,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     }
   }
 
-  const handleKeyPress = (e: SyntheticEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handlePageChange(1);
