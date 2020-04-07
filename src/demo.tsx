@@ -13,14 +13,14 @@ import Immutable from 'immutable';
 // Local
 import Tabletable from './Container';
 import fakeData from '../test/fake_data.json';
-import { Data, Columns, Row, Context } from './ts_types';
+import { Row, Context, Column } from './ts_types';
 
 
 class Demo extends React.Component {
   render() {
     let immutableData = Immutable.fromJS(fakeData);
 
-    let columnDefs = [
+    let columnDefs:Array<Column> = [
       {
         display: 'Index',
         headerCssClass: 'col-sm-1',
