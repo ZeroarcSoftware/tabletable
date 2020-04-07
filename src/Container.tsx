@@ -1,7 +1,7 @@
 // Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import React, { ReactElement, SyntheticEvent, MouseEvent, FunctionComponent } from 'react';
+import React, { useState, ReactElement, SyntheticEvent, MouseEvent, FunctionComponent } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
@@ -72,6 +72,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
   totalRows,
 }) => {
 
+  const [formFilterValue, setFilterValue] = useState("");
+
   //
   // Custom methods
   //
@@ -79,21 +81,12 @@ const TabletableContainer: FunctionComponent<Props> = ({
     if (onPageChange) {
       onPageChange(pageNumber);
     }
-    else {
-      // this.setState({ currentPage: pageNumber });
-    }
-  }
-
-  // Update local state
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    // this.setState({ filterValue: e.target.value });
   }
 
   // Call external onSearch if pased
   const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    onSearch // && onSearch(this.state.filterValue);
+    onSearch && onSearch(formFilterValue);
   }
 
   // Call external onSort, pass column key pressed.
@@ -116,10 +109,9 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   const handleClearFilterClick = (e: SyntheticEvent) => {
     e.preventDefault();
-
     // Reset to first page to re-orient user
-    if (filterValue) {
-      // this.setState({ filterValue: '' });
+    if (formFilterValue) {
+      setFilterValue('');
       handlePageChange(1);
       onClear && onClear();
     }
@@ -129,7 +121,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     if (e.key === 'Enter') {
       e.preventDefault();
       handlePageChange(1);
-      onSearch // && onSearch(this.state.filterValue);
+      onSearch && onSearch(formFilterValue);
     }
   }
 
@@ -251,7 +243,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
           <button className={clearClasses} style={{ position: 'absolute', right: '45px', top: '3px', zIndex: 10 }} onClick={handleClearFilterClick}>
             <FontAwesomeIcon icon={['fas', 'times']} fixedWidth /> Clear
           </button>
-          <input type='text' className='form-control' placeholder='Type to filter' value={filterValue} onChange={handleFilterChange} onKeyPress={handleKeyPress} />
+          <input type='text' className='form-control' placeholder='Type to filter' value={formFilterValue} onChange={e => setFilterValue(e.target.value)} onKeyPress={handleKeyPress} />
           <div className="input-group-append">
             <button className={filterButtonClasses} onClick={handleSearchClick}>
               <FontAwesomeIcon icon={['fas', 'search']} fixedWidth />
