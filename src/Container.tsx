@@ -7,9 +7,11 @@ import ClassNames from 'classnames';
 // Fonts
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSort, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faSort, faTimes, faSearch, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
 library.add(
   faSort,
+  faSortDown,
+  faSortUp,
   faTimes,
   faSearch,
 );
@@ -90,8 +92,10 @@ const TabletableContainer: FunctionComponent<Props> = ({
     // Check to see if the column clicked is the one we initalized
     // If so change direction, if not update sortCriteria with new sort, defualt to 'asc'
     let direction = 'asc';
-    if (sortCriteria !== undefined && sortCriteria.key == columnKey) {
+    console.log(sortCriteria);
+    if (sortCriteria !== undefined && sortCriteria.key === columnKey) {
       // Reversing current sort.
+      console.log('reversing');
       direction = sortCriteria.direction === 'asc' ? 'desc' : 'asc';
       onSort!(columnKey, direction);
     }
@@ -133,7 +137,17 @@ const TabletableContainer: FunctionComponent<Props> = ({
       let sortAction: boolean = false;
       // Add icon/action if column is sortable.
       if (col.sortable) {
-        sortIcon = <FontAwesomeIcon icon={['fas', 'sort']} fixedWidth />;
+        if (sortCriteria !== undefined && sortCriteria.key === col.key) {
+          if (sortCriteria.direction === 'asc') {
+            sortIcon = <FontAwesomeIcon icon={['fas', 'sort-up']} fixedWidth />;
+          }
+          else {
+            sortIcon = <FontAwesomeIcon icon={['fas', 'sort-down']} fixedWidth />;
+          }
+        }
+        else {
+          sortIcon = <FontAwesomeIcon icon={['fas', 'sort']} fixedWidth />;
+        }
         sortAction = true;
       }
       headerComponents.push(
