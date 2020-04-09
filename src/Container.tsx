@@ -1,4 +1,4 @@
-// Tabletable - Copyright 2017 Zeroarc Software, LLC
+// Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
 import React, { useState, ReactElement, SyntheticEvent, MouseEvent, FunctionComponent } from 'react';
@@ -18,31 +18,33 @@ library.add(
 
 // Local
 import Pager from './Pager';
-import { Data, Columns, Row, Context } from './ts_types';
+import { Data, Column, Row, Context } from './ts_types';
 
 type Props = {
-  columns: Columns,
-  containerCssClass: string,
+  columns: Array<Column>,
   data: Data,
   pagerSize: number,
   rowsPerPage: number,
-  showFilter: boolean,
-  showPager: boolean,
-  tableCssClass: string,
 
   // Optional
+  containerCssClass?: string,
   currentPage?: number,
+  editable?: boolean,
   filterValue?: string | undefined,
   pager?: any, // TODO WTH is the type for this
   onClear?: () => void,
   onSearch?: (searchText: string) => void,
   onSort?: (key: string, direction: string) => void,
   onPageChange?: (page: number) => void,
+  responsive?: boolean,
   rowContext?: (Row: Row, number: number) => any,
-  rowCssClass?: (Row: Row, number: number, Context: Context) => any,
+  rowCssClass?: (Row: Row, number: number, Context: Context) => string | string,
+  showFilter?: boolean,
+  showPager?: boolean,
   showSpinner?: boolean,
   spinner?: any,
   sortCriteria?: { key: string, direction: string },
+  tableCssClass?: string,
   totalRows?: number,
 }
 
@@ -52,6 +54,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   containerCssClass = 'tabletable',
   currentPage = 1,
   data,
+  editable = false,
   filterValue = '',
   onClear,
   onPageChange,
@@ -59,13 +62,14 @@ const TabletableContainer: FunctionComponent<Props> = ({
   onSort,
   pagerSize = 10,
   rowContext,
-  rowCssClass,
+  rowCssClass = '',
   rowsPerPage = 5,
   showPager = true,
   showFilter = false,
   showSpinner,
   spinner,
   sortCriteria,
+  responsive = false,
   tableCssClass = 'table table-striped table-bordered table-hover',
   totalRows,
 }) => {
@@ -82,24 +86,26 @@ const TabletableContainer: FunctionComponent<Props> = ({
   }
 
   // Call external onSearch if pased
-  const handleSearchClick = (e: SyntheticEvent) => {
+  const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onSearch && onSearch(formFilterValue);
   }
 
   // Call external onSort, pass column key pressed.
-  const handleSortClick = (columnKey: string) => {
+  const handleSortClick = (col: Column) => {
+    if (!col.key) return;
+
     // Check to see if the column clicked is the one we initalized
     // If so change direction, if not update sortCriteria with new sort, defualt to 'asc'
     let direction = 'asc';
-    if (sortCriteria !== undefined && sortCriteria.key === columnKey) {
+    if (sortCriteria !== undefined && sortCriteria.key === col.key) {
       // Reversing current sort.
       direction = sortCriteria.direction === 'asc' ? 'desc' : 'asc';
-      onSort!(columnKey, direction);
+      onSort!(col.key, direction);
     }
     else {
       // Sorting new column
-      onSort!(columnKey, direction);
+      onSort!(col.key, direction);
     }
   }
 
@@ -113,7 +119,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     }
   }
 
-  const handleKeyPress = (e: SyntheticEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handlePageChange(1);
@@ -132,7 +138,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
     // If visible is false, hide the column. If visible is not defined, default to showing column.
     if (typeof col.visible === 'undefined' || col.visible) {
       let sortIcon: JSX.Element | null = null;
-      let sortAction: boolean = false;
       // Add icon/action if column is sortable.
       if (col.sortable) {
         if (sortCriteria !== undefined && sortCriteria.key === col.key) {
@@ -146,10 +151,9 @@ const TabletableContainer: FunctionComponent<Props> = ({
         else {
           sortIcon = <FontAwesomeIcon icon={['fas', 'sort']} fixedWidth />;
         }
-        sortAction = true;
       }
       headerComponents.push(
-        <th key={`th-${i}`} onClick={sortAction ? () => handleSortClick(col.key) : null} data-column={col.key} className={col.headerCssClass}>{col.display || ''}{sortIcon}</th>
+        <th key={`th-${i}`} onClick={() => handleSortClick(col)} data-column={col.key} className={col.headerCssClass}>{col.display || ''}{sortIcon}</th>
       );
     }
   });
@@ -174,15 +178,22 @@ const TabletableContainer: FunctionComponent<Props> = ({
     // Build out components for the row
     let rowComponents: JSX.Element[] = [];
     columns.forEach((col, i) => {
-      // If visible is false, hide the column. If visible is not defined, default to showing column
-      if (typeof col.visible === 'undefined' || col.visible) {
-        // elementCssClass can either be a string or a function that returns a string
-        let elementCssClass: any = col.elementCssClass;
-        if (typeof col.elementCssClass === 'function') {
-          elementCssClass = col.elementCssClass(row, index, context && context.toObject());
-          if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
-        }
+      // If visible is false or undefined, don't show the column
+      if (col.visible == false) return;
 
+      // elementCssClass can either be a string or a function that returns a string
+      let elementCssClass: any = col.elementCssClass;
+      if (typeof col.elementCssClass === 'function') {
+        elementCssClass = col.elementCssClass(row, index, context && context.toObject());
+        if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
+      }
+
+      if (editable && col.edit) {
+        rowComponents.push(
+          <td key={`${index}-${i}`} className={elementCssClass}>{col.edit(row, index, context && context.toObject())}</td>
+        );
+      }
+      else {
         rowComponents.push(
           <td key={`${index}-${i}`} className={elementCssClass}>{col.data(row, index, context && context.toObject())}</td>
         );
@@ -267,7 +278,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {showSpinner ? (
         spinner
       ) : (
-          <>
+          <div className={responsive ? 'table-responsive' : ''}>
             <table className={tableCssClass}>
               <thead>
                 <tr>
@@ -279,7 +290,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
               </tbody>
             </table>
             {pager}
-          </>
+          </div>
         )
       }
     </div>
