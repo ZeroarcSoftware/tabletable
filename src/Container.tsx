@@ -92,10 +92,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
     // Check to see if the column clicked is the one we initalized
     // If so change direction, if not update sortCriteria with new sort, defualt to 'asc'
     let direction = 'asc';
-    console.log(sortCriteria);
     if (sortCriteria !== undefined && sortCriteria.key === columnKey) {
       // Reversing current sort.
-      console.log('reversing');
       direction = sortCriteria.direction === 'asc' ? 'desc' : 'asc';
       onSort!(columnKey, direction);
     }
