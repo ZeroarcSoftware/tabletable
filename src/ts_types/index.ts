@@ -3,7 +3,7 @@
 
 import * as Immutable from 'immutable';
 
-export type Data = Immutable.Map<number, any>;
+export type Data = Immutable.List<Immutable.Map<string, any>>;
 
 export type Row = any;
 
@@ -12,7 +12,7 @@ export type Context = Immutable.Map<any, any> | Immutable.List<any>;
 // Column specific properties
 export type Column = {
   data: (Row: any, number: number, Context: any) => React.ReactNode,
-  edit: (Row: any, number: number, Context: any) => React.ReactNode,
+  edit?: (Row: any, number: number, Context: any) => React.ReactNode,
   display: string,
   elementCssClass?: (Row: any, number: number, Context: any) => string,
   headerCssClass?: string,

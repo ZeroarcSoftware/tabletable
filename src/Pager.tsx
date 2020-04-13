@@ -19,7 +19,7 @@ const TabletablePager: FunctionComponent<Props> = ({
 
   const pageChange = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    onPageChange(parseInt(e.target.getAttribute('data-value')));
+    // onPageChange(parseInt(e.target.getAttribute('data-value')));
   }
 
   const previousPageChange = (e: SyntheticEvent) => {
@@ -56,7 +56,7 @@ const TabletablePager: FunctionComponent<Props> = ({
   }
 
   for (let i = startIndex; i <= endIndex; i++) {
-    const thisButtonClasses = ClassNames('btn', 'btn-white', 'btn-sm', {
+    const thisButtonClasses = ClassNames('btn', 'btn-outline-secondary', 'btn-sm', {
       'label-success': currentPage === i
     });
     options.push(

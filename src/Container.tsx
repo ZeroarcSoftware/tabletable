@@ -30,7 +30,6 @@ type Props = {
   containerCssClass?: string,
   currentPage?: number,
   editable?: boolean,
-  filterValue?: string | undefined,
   pager?: any, // TODO WTH is the type for this
   onClear?: () => void,
   onSearch?: (searchText: string) => void,
@@ -55,7 +54,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
   currentPage = 1,
   data,
   editable = false,
-  filterValue = '',
   onClear,
   onPageChange,
   onSearch,
@@ -245,7 +243,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
   });
 
   const clearClasses: string = ClassNames('btn', 'btn-outline-secondary', 'btn-sm', {
-    // 'd-none': !this.state.filterValue || this.state.filterValue.length === 0
   });
 
   const filterControl = showFilter

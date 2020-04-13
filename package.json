@@ -3,9 +3,9 @@
   "version": "4.0.0",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/Container.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ --extensions '.ts,.tsx'",
+    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ --extensions '.ts,.tsx' && tsc",
     "check-types": "tsc",
     "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ --extensions '.ts,.tsx'",
     "demo-watch": "$(npm bin)/webpack -w",
