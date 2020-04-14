@@ -5,7 +5,7 @@ import * as Immutable from 'immutable';
 
 export type Data = Immutable.List<Immutable.Map<string, any>>;
 
-export type Row = any;
+export type Row = Immutable.Map<string, any>;
 
 export type Context = Immutable.Map<any, any> | Immutable.List<any>;
 

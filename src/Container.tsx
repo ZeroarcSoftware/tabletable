@@ -36,8 +36,8 @@ type Props = {
   onSort?: (key: string, direction: string) => void,
   onPageChange?: (page: number) => void,
   responsive?: boolean,
-  rowContext?: (Row: Row, number: number) => any,
-  rowCssClass?: (Row: Row, number: number, Context: Context) => string | string,
+  rowContext?: (row: Row, number: number) => any,
+  rowCssClass?: (row: Row, number: number, Context: Context) => string | string,
   showFilter?: boolean,
   showPager?: boolean,
   showSpinner?: boolean,
@@ -74,9 +74,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   const [formFilterValue, setFilterValue] = useState("");
 
-  //
-  // Custom methods
-  //
+  //#region Event Handlers
+
   const handlePageChange = (pageNumber: number) => {
     if (onPageChange) {
       onPageChange(pageNumber);
@@ -124,6 +123,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
       onSearch && onSearch(formFilterValue);
     }
   }
+
+  //#endregion
 
   if (!Immutable.isImmutable(data)) {
     console.error('Invalid prop data supplied to TableTable. Expected Immutable iterable.');

@@ -6,8 +6,8 @@
   "types": "dist/Container.d.ts",
   "scripts": {
     "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ --extensions '.ts,.tsx' && tsc",
-    "check-types": "tsc",
-    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ --extensions '.ts,.tsx'",
+    "check-types": "tsc --noEmit",
+    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ --extensions '.ts,.tsx' && tsc --watch",
     "demo-watch": "$(npm bin)/webpack -w",
     "demo-build": "$(npm bin)/webpack",
     "prepare": "npm run build",
