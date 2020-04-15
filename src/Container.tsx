@@ -90,7 +90,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   // Call external onSort, pass column key pressed.
   const handleSortClick = (col: Column) => {
-    if (!col.key) return;
+    if (!col.key || !col.sortable) return;
 
     // Check to see if the column clicked is the one we initalized
     // If so change direction, if not update sortCriteria with new sort, defualt to 'asc'
