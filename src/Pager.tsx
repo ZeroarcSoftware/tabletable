@@ -19,7 +19,10 @@ const TabletablePager: FunctionComponent<Props> = ({
 
   const pageChange = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    onPageChange(parseInt(e.target.getAttribute('data-value')));
+    const el = e.target as HTMLInputElement;
+    const page = parseInt(el.getAttribute('data-value') || '');
+    if (!isNaN(page))
+      onPageChange(page);
   }
 
   const previousPageChange = (e: SyntheticEvent) => {
