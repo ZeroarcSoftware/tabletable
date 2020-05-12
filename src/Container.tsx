@@ -1,7 +1,7 @@
 // Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import React, { useState, ReactElement, SyntheticEvent, MouseEvent, FunctionComponent } from 'react';
+import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
@@ -30,6 +30,9 @@ type Props = {
   containerCssClass?: string,
   currentPage?: number,
   editable?: boolean,
+  // This is used to set the initial state of the filter. If the parent component changes it,
+  // the filter will be reset the new value
+  filterValue?: string,
   pager?: any, // TODO WTH is the type for this
   onClear?: () => void,
   onSearch?: (searchText: string) => void,
@@ -54,6 +57,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   currentPage = 1,
   data,
   editable = false,
+  filterValue = '',
   onClear,
   onPageChange,
   onSearch,
@@ -71,8 +75,13 @@ const TabletableContainer: FunctionComponent<Props> = ({
   tableCssClass = 'table table-striped table-bordered table-hover',
   totalRows,
 }) => {
+  const [formFilterValue, setFilterValue] = useState(filterValue);
 
-  const [formFilterValue, setFilterValue] = useState("");
+  // Track filterValue changes and reset the state to the passed in value
+  // if it changes
+  useEffect(() => {
+    setFilterValue(filterValue);
+  }, [filterValue])
 
   //#region Event Handlers
 
