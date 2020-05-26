@@ -178,9 +178,18 @@ const TabletableContainer: FunctionComponent<Props> = ({
     // during a column step. We will re-project from the Immutable each time it is used
     const context = Immutable.fromJS(rowContext ? rowContext(row, index) : {});
 
-    if (typeof rowCssClass === 'function') {
-      rowCssClass = rowCssClass(row, index, context && context.toObject());
-      if (typeof rowCssClass !== 'string') console.error('rowCssClass function must return a string value. Was ' + typeof rowCssClass);
+    let _rowCssClass = '';
+    if (typeof rowCssClass === 'string') {
+        _rowCssClass = rowCssClass;
+    }
+    else if (typeof rowCssClass === 'function') {
+      const renderedClass = rowCssClass(row, index, context && context.toObject());
+      if (typeof renderedClass === 'string') {
+        _rowCssClass = renderedClass;
+      }
+      else {
+        console.error('rowCssClass function must return a string value. Was ' + typeof renderedClass);
+      }
     }
 
     // Build out components for the row
@@ -209,7 +218,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     });
 
     return (
-      <tr key={index} className={rowCssClass}>
+      <tr key={index} className={_rowCssClass}>
         {rowComponents}
       </tr>
     );
