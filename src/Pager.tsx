@@ -59,8 +59,9 @@ const TabletablePager: FunctionComponent<Props> = ({
   }
 
   for (let i = startIndex; i <= endIndex; i++) {
-    const thisButtonClasses = ClassNames('btn btn-outline-secondary btn-sm', {
-      'label-success': currentPage === i,
+    const thisButtonClasses = ClassNames('btn btn-sm', {
+      'btn-primary': currentPage === i,
+      'btn-outline-secondary': currentPage !== i,
       'mr-1': i !== endIndex
     });
     options.push(
