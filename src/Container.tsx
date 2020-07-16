@@ -18,7 +18,7 @@ library.add(
 
 // Local
 import Pager from './Pager';
-import { Data, Column, Row, Context } from './ts_types';
+import { Data, Column, Row, Context, SortDirection, TableMode, SortCriteria } from './ts_types';
 
 type Props = {
   columns: Array<Column>,
@@ -27,16 +27,18 @@ type Props = {
   rowsPerPage: number,
 
   // Optional
+  createMode?: boolean,
+  createErrorMessage?: string,
   containerCssClass?: string,
   currentPage?: number,
-  editable?: boolean,
+  mode?: TableMode,
   // This is used to set the initial state of the filter. If the parent component changes it,
   // the filter will be reset the new value
   filterValue?: string,
   pager?: any, // TODO WTH is the type for this
   onClear?: () => void,
   onSearch?: (searchText: string) => void,
-  onSort?: (key: string, direction: string) => void,
+  onSort?: (key: string, direction: SortDirection) => void,
   onPageChange?: (page: number) => void,
   responsive?: boolean,
   rowContext?: (row: Row, number: number) => any,
@@ -45,7 +47,7 @@ type Props = {
   showPager?: boolean,
   showSpinner?: boolean,
   spinner?: any,
-  sortCriteria?: { key: string, direction: string },
+  sortCriteria?: SortCriteria,
   tableCssClass?: string,
   totalRows?: number,
 }
@@ -54,9 +56,10 @@ const TabletableContainer: FunctionComponent<Props> = ({
   children, // Note: FunctionComponent allows use of children even though we haven't defined them in our Props
   columns,
   containerCssClass = 'tabletable',
+  createErrorMessage,
   currentPage = 1,
   data,
-  editable = false,
+  mode = 'display',
   filterValue = '',
   onClear,
   onPageChange,
@@ -81,7 +84,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   // if it changes
   useEffect(() => {
     setFilterValue(filterValue);
-  }, [filterValue])
+  }, [filterValue]);
 
   //#region Event Handlers
 
@@ -89,13 +92,13 @@ const TabletableContainer: FunctionComponent<Props> = ({
     if (onPageChange) {
       onPageChange(pageNumber);
     }
-  }
+  };
 
   // Call external onSearch if pased
   const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onSearch && onSearch(formFilterValue);
-  }
+  };
 
   // Call external onSort, pass column key pressed.
   const handleSortClick = (col: Column) => {
@@ -103,7 +106,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
     // Check to see if the column clicked is the one we initalized
     // If so change direction, if not update sortCriteria with new sort, defualt to 'asc'
-    let direction = 'asc';
+    let direction: SortDirection = 'asc';
     if (sortCriteria !== undefined && sortCriteria.key === col.key) {
       // Reversing current sort.
       direction = sortCriteria.direction === 'asc' ? 'desc' : 'asc';
@@ -113,7 +116,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       // Sorting new column
       onSort!(col.key, direction);
     }
-  }
+  };
 
   const handleClearFilterClick = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -123,7 +126,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       handlePageChange(1);
       onClear && onClear();
     }
-  }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -131,7 +134,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       handlePageChange(1);
       onSearch && onSearch(formFilterValue);
     }
-  }
+  };
 
   //#endregion
 
@@ -196,7 +199,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     let rowComponents: JSX.Element[] = [];
     columns.forEach((col, i) => {
       // If visible is false or undefined, don't show the column
-      if (col.visible == false) return;
+      if (col.visible === false) return;
 
       // elementCssClass can either be a string or a function that returns a string
       let elementCssClass: any = col.elementCssClass;
@@ -205,14 +208,19 @@ const TabletableContainer: FunctionComponent<Props> = ({
         if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
       }
 
-      if (editable && col.edit) {
+      if (mode === 'edit' && typeof col.edit === 'function') {
         rowComponents.push(
           <td key={`${index}-${i}`} className={elementCssClass}>{col.edit(row, index, context && context.toObject())}</td>
         );
       }
-      else {
+      else if (typeof col.data === 'function') {
         rowComponents.push(
           <td key={`${index}-${i}`} className={elementCssClass}>{col.data(row, index, context && context.toObject())}</td>
+        );
+      }
+      else {
+        rowComponents.push(
+          <td key={`${index}-${i}`} className={elementCssClass}></td>
         );
       }
     });
@@ -223,6 +231,54 @@ const TabletableContainer: FunctionComponent<Props> = ({
       </tr>
     );
   });
+
+  let createRow: JSX.Element | null = null;
+  let errorRow: JSX.Element | null = null;
+
+  if (mode === 'create') {
+    let _rowCssClass = '';
+    if (typeof rowCssClass === 'string') {
+      _rowCssClass = rowCssClass;
+    }
+
+    // Build out components for the row
+    let rowComponents: JSX.Element[] = [];
+    columns.forEach((col, i) => {
+      // If visible is false or undefined, don't show the column
+      if (col.visible === false) return;
+
+      // elementCssClass can either be a string or a function that returns a string
+      let elementCssClass: any = col.elementCssClass;
+
+      if (mode === 'create' && typeof col.create === 'function') {
+        rowComponents.push(
+          <td key={`create-${i}`} className={elementCssClass}>{col.create()}</td>
+        );
+      }
+      else {
+        rowComponents.push(
+          <td key={`create-${i}`} className={elementCssClass}></td>
+        );
+      }
+    });
+
+    createRow = (
+      <tr className={_rowCssClass}>
+        {rowComponents}
+      </tr>
+    );
+
+    if (createErrorMessage) {
+      errorRow = (
+        <tr className={_rowCssClass}>
+          <td className='text-danger' colSpan={columns.length}>
+            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createErrorMessage}
+          </td>
+        </tr>
+      );
+    }
+  }
+
 
   // Setup pager. If totalRows has been populated, use that, otherwise count passed in data
   totalRows = totalRows ? totalRows : data.size;
@@ -302,13 +358,15 @@ const TabletableContainer: FunctionComponent<Props> = ({
                 </tr>
               </thead>
               <tbody>
+                {mode === 'create' && createRow}
+                {mode === 'create' && errorRow}
                 {rows.toList()}
               </tbody>
             </table>
-            {pager}
           </div>
         )
       }
+    {pager}
     </div>
   );
 }

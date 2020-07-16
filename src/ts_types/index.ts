@@ -11,6 +11,7 @@ export type Context = Immutable.Map<any, any> | Immutable.List<any>;
 
 // Column specific properties
 export type Column = {
+  create?: () => React.ReactNode,
   data: (Row: any, number: number, Context: any) => React.ReactNode,
   edit?: (Row: any, number: number, Context: any) => React.ReactNode,
   display: string,
@@ -20,3 +21,7 @@ export type Column = {
   sortable?: boolean,
   visible?: boolean,
 };
+
+export type SortDirection = 'asc' | 'desc';
+export type SortCriteria = { key: string, direction: SortDirection };
+export type TableMode = 'create' | 'edit' | 'display';
