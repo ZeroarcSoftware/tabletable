@@ -1,6 +1,6 @@
 {
   "name": "tabletable",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
   "types": "dist/Container.d.ts",
@@ -29,16 +29,16 @@
   },
   "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
   "devDependencies": {
-    "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/plugin-proposal-decorators": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
     "babel-loader": "^8.1.0",
     "source-map-loader": "^1.0.1",
-    "ts-loader": "^7.0.5",
+    "ts-loader": "^8.0.1",
     "typescript": "^3.9.6",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
@@ -48,11 +48,11 @@
     "react-dom": "^16.4.2"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.28",
-    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.30",
+    "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "@types/classnames": "^2.2.10",
-    "@types/react": "^16.9.32",
+    "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.6",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.5",
