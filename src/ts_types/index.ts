@@ -22,6 +22,11 @@ export type Column = {
   visible?: boolean,
 };
 
+export type RowError = {
+  key?: string,
+  errorMessage: string,
+};
+
 export type SortDirection = 'asc' | 'desc';
 export type SortCriteria = { key: string, direction: SortDirection };
 export type TableMode = 'create' | 'edit' | 'display';

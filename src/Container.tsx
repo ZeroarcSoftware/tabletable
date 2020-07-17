@@ -18,7 +18,7 @@ library.add(
 
 // Local
 import Pager from './Pager';
-import { Data, Column, Row, Context, SortDirection, TableMode, SortCriteria } from './ts_types';
+import { Data, Column, Row, Context, SortDirection, TableMode, SortCriteria, RowError } from './ts_types';
 
 type Props = {
   columns: Array<Column>,
@@ -180,6 +180,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     // Create row context if required. Make it an immutable so nobody tries to abuse it by shoving stuff into it
     // during a column step. We will re-project from the Immutable each time it is used
     const context = Immutable.fromJS(rowContext ? rowContext(row, index) : {});
+    const error = context && context.get('error');
 
     let _rowCssClass = '';
     if (typeof rowCssClass === 'string') {
@@ -195,6 +196,12 @@ const TabletableContainer: FunctionComponent<Props> = ({
       }
     }
 
+    if (error && !error.key) {
+      console.log('displaying row error');
+      _rowCssClass += ' bg-danger';
+    }
+
+
     // Build out components for the row
     let rowComponents: JSX.Element[] = [];
     columns.forEach((col, i) => {
@@ -206,6 +213,10 @@ const TabletableContainer: FunctionComponent<Props> = ({
       if (typeof col.elementCssClass === 'function') {
         elementCssClass = col.elementCssClass(row, index, context && context.toObject());
         if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
+      }
+
+      if (error?.key && error?.key === col.key) {
+        elementCssClass += ' bg-danger';
       }
 
       if (mode === 'edit' && typeof col.edit === 'function') {
@@ -225,10 +236,24 @@ const TabletableContainer: FunctionComponent<Props> = ({
       }
     });
 
+    const errorRow = error
+      ? (
+        <tr key={`${index}-error`}>
+          <td colSpan={columns.length} className='text-danger'>
+            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {error.get('errorMessage')}
+          </td>
+        </tr>
+      )
+      : null;
+
+
     return (
-      <tr key={index} className={_rowCssClass}>
-        {rowComponents}
-      </tr>
+      <>
+        <tr key={index} className={_rowCssClass}>
+          {rowComponents}
+        </tr>
+        {errorRow}
+      </>
     );
   });
 
