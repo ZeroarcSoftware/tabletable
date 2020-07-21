@@ -13,7 +13,7 @@ export type Context = Immutable.Map<any, any> | Immutable.List<any>;
 export type Column = {
   create?: () => React.ReactNode,
   data: (Row: any, number: number, Context: any) => React.ReactNode,
-  edit?: (Row: any, number: number, Context: any) => React.ReactNode,
+  edit?: (Row: any, number: number, Context: any, fieldError: boolean) => React.ReactNode,
   display: string,
   elementCssClass?: (Row: any, number: number, Context: any) => string,
   headerCssClass?: string,

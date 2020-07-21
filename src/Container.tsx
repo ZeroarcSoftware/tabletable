@@ -196,7 +196,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       }
     }
 
-    if (error && !error.key) {
+    if (error && !error.get('key')) {
       console.log('displaying row error');
       _rowCssClass += ' bg-danger';
     }
@@ -215,13 +215,11 @@ const TabletableContainer: FunctionComponent<Props> = ({
         if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
       }
 
-      if (error?.key && error?.key === col.key) {
-        elementCssClass += ' bg-danger';
-      }
+      let fieldLevelError = col.key && error && error.get('key') === col.key.toLowerCase();
 
       if (mode === 'edit' && typeof col.edit === 'function') {
         rowComponents.push(
-          <td key={`${index}-${i}`} className={elementCssClass}>{col.edit(row, index, context && context.toObject())}</td>
+          <td key={`${index}-${i}`} className={elementCssClass}>{col.edit(row, index, context && context.toObject(), fieldLevelError)}</td>
         );
       }
       else if (typeof col.data === 'function') {
