@@ -28,7 +28,7 @@ type Props = {
 
   // Optional
   createMode?: boolean,
-  createErrorMessage?: string,
+  createError?: Immutable.Map<string, string>,
   containerCssClass?: string,
   currentPage?: number,
   mode?: TableMode,
@@ -56,7 +56,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   children, // Note: FunctionComponent allows use of children even though we haven't defined them in our Props
   columns,
   containerCssClass = 'tabletable',
-  createErrorMessage,
+  createError,
   currentPage = 1,
   data,
   mode = 'display',
@@ -215,7 +215,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
         if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
       }
 
-      let fieldLevelError = col.key && error && error.get('key') === col.key.toLowerCase();
+      const fieldLevelError = !!(col.key && error?.get('key')?.toLowerCase() === col.key.toLowerCase());
 
       if (mode === 'edit' && typeof col.edit === 'function') {
         rowComponents.push(
@@ -273,9 +273,11 @@ const TabletableContainer: FunctionComponent<Props> = ({
       // elementCssClass can either be a string or a function that returns a string
       let elementCssClass: any = col.elementCssClass;
 
+      const fieldLevelError = !!(col.key && createError?.get('key')?.toLowerCase() === col.key.toLowerCase());
+
       if (mode === 'create' && typeof col.create === 'function') {
         rowComponents.push(
-          <td key={`create-${i}`} className={elementCssClass}>{col.create()}</td>
+          <td key={`create-${i}`} className={elementCssClass}>{col.create(fieldLevelError)}</td>
         );
       }
       else {
@@ -291,11 +293,11 @@ const TabletableContainer: FunctionComponent<Props> = ({
       </tr>
     );
 
-    if (createErrorMessage) {
+    if (createError?.get('errorMessage')) {
       errorRow = (
         <tr className={_rowCssClass}>
           <td className='text-danger' colSpan={columns.length}>
-            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createErrorMessage}
+            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.get('errorMessage')}
           </td>
         </tr>
       );

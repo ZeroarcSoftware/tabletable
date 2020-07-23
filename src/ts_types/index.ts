@@ -11,7 +11,7 @@ export type Context = Immutable.Map<any, any> | Immutable.List<any>;
 
 // Column specific properties
 export type Column = {
-  create?: () => React.ReactNode,
+  create?: (fieldError: boolean) => React.ReactNode,
   data: (Row: any, number: number, Context: any) => React.ReactNode,
   edit?: (Row: any, number: number, Context: any, fieldError: boolean) => React.ReactNode,
   display: string,
