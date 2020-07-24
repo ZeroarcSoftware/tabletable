@@ -28,7 +28,7 @@ type Props = {
 
   // Optional
   createMode?: boolean,
-  createError?: Immutable.Map<string, string>,
+  createError?: RowError,
   containerCssClass?: string,
   currentPage?: number,
   mode?: TableMode,
@@ -180,7 +180,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     // Create row context if required. Make it an immutable so nobody tries to abuse it by shoving stuff into it
     // during a column step. We will re-project from the Immutable each time it is used
     const context = Immutable.fromJS(rowContext ? rowContext(row, index) : {});
-    const error = context && context.get('error');
+    const error = rowContext ? rowContext(row, index)?.error : null;
 
     let _rowCssClass = '';
     if (typeof rowCssClass === 'string') {
@@ -196,11 +196,10 @@ const TabletableContainer: FunctionComponent<Props> = ({
       }
     }
 
-    if (error && !error.get('key')) {
+    if (error && !error.key) {
       console.log('displaying row error');
       _rowCssClass += ' bg-danger';
     }
-
 
     // Build out components for the row
     let rowComponents: JSX.Element[] = [];
@@ -215,7 +214,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
         if (typeof elementCssClass !== 'string') console.error('elementCssClass function must return a string value. Was ' + typeof elementCssClass);
       }
 
-      const fieldLevelError = !!(col.key && error?.get('key')?.toLowerCase() === col.key.toLowerCase());
+      const fieldLevelError = !!(col.key && error?.key?.toLowerCase() === col.key.toLowerCase());
 
       if (mode === 'edit' && typeof col.edit === 'function') {
         rowComponents.push(
@@ -238,7 +237,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       ? (
         <tr key={`${index}-error`}>
           <td colSpan={columns.length} className='text-danger'>
-            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {error.get('errorMessage')}
+            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {error.errorMessage}
           </td>
         </tr>
       )
@@ -273,7 +272,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       // elementCssClass can either be a string or a function that returns a string
       let elementCssClass: any = col.elementCssClass;
 
-      const fieldLevelError = !!(col.key && createError?.get('key')?.toLowerCase() === col.key.toLowerCase());
+      const fieldLevelError = !!(col.key && createError?.key?.toLowerCase() === col.key.toLowerCase());
 
       if (mode === 'create' && typeof col.create === 'function') {
         rowComponents.push(
@@ -293,11 +292,11 @@ const TabletableContainer: FunctionComponent<Props> = ({
       </tr>
     );
 
-    if (createError?.get('errorMessage')) {
+    if (createError?.errorMessage) {
       errorRow = (
         <tr className={_rowCssClass}>
           <td className='text-danger' colSpan={columns.length}>
-            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.get('errorMessage')}
+            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}
           </td>
         </tr>
       );
