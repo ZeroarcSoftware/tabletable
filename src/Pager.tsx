@@ -65,7 +65,7 @@ const TabletablePager: FunctionComponent<Props> = ({
       'mr-1': i !== endIndex
     });
     options.push(
-      <button key={i}
+      <button key={`option-${i}`}
         className={thisButtonClasses}
         style={{ minWidth: '2.5em' }}
         data-value={i}

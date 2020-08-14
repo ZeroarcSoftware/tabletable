@@ -218,24 +218,24 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
       if (mode === 'edit' && typeof col.edit === 'function') {
         rowComponents.push(
-          <td key={`${index}-${i}`} className={elementCssClass}>{col.edit(row, index, context && context.toObject(), fieldLevelError)}</td>
+          <td key={`td-${index}-${i}`} className={elementCssClass}>{col.edit(row, index, context && context.toObject(), fieldLevelError)}</td>
         );
       }
       else if (typeof col.data === 'function') {
         rowComponents.push(
-          <td key={`${index}-${i}`} className={elementCssClass}>{col.data(row, index, context && context.toObject())}</td>
+          <td key={`td-${index}-${i}`} className={elementCssClass}>{col.data(row, index, context && context.toObject())}</td>
         );
       }
       else {
         rowComponents.push(
-          <td key={`${index}-${i}`} className={elementCssClass}></td>
+          <td key={`td-${index}-${i}`} className={elementCssClass}></td>
         );
       }
     });
 
     const errorRow = error
       ? (
-        <tr key={`${index}-error`}>
+        <tr key={`td-${index}-error`}>
           <td colSpan={columns.length} className='text-danger'>
             <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {error.errorMessage}
           </td>
@@ -245,12 +245,12 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
 
     return (
-      <>
-        <tr key={index} className={_rowCssClass}>
+      <React.Fragment key={`tr-${index}`}>
+        <tr className={_rowCssClass}>
           {rowComponents}
         </tr>
         {errorRow}
-      </>
+      </React.Fragment>
     );
   });
 
@@ -276,12 +276,12 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
       if (mode === 'create' && typeof col.create === 'function') {
         rowComponents.push(
-          <td key={`create-${i}`} className={elementCssClass}>{col.create(fieldLevelError)}</td>
+          <td key={`td-create-${i}`} className={elementCssClass}>{col.create(fieldLevelError)}</td>
         );
       }
       else {
         rowComponents.push(
-          <td key={`create-${i}`} className={elementCssClass}></td>
+          <td key={`td-create-${i}`} className={elementCssClass}></td>
         );
       }
     });
