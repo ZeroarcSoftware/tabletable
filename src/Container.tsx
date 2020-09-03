@@ -1,7 +1,7 @@
 // Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect } from 'react';
+import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect, useRef } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
@@ -27,6 +27,7 @@ type Props = {
   rowsPerPage: number,
 
   // Optional
+  createActions?: any,
   createMode?: boolean,
   createError?: RowError,
   containerCssClass?: string,
@@ -56,6 +57,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   children, // Note: FunctionComponent allows use of children even though we haven't defined them in our Props
   columns,
   containerCssClass = 'tabletable',
+  createActions = null,
   createError = null,
   currentPage = 1,
   data,
@@ -86,6 +88,16 @@ const TabletableContainer: FunctionComponent<Props> = ({
     setFilterValue(filterValue);
   }, [filterValue]);
 
+  const createActionRef = useRef(null);
+  const scrollToRef = (ref, leftPos) => {
+    //ref.scrollTo(0, ref.current.offsetTop)
+  };
+  const executeScroll = (e) => {
+    let element = e.target;
+    let tableAbsLeft = element.scrollLeft;
+    console.log('this is left offset', tableAbsLeft);
+    scrollToRef(createActionRef, tableAbsLeft);
+  }
   //#region Event Handlers
 
   const handlePageChange = (pageNumber: number) => {
@@ -145,6 +157,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   let headerComponents: JSX.Element[] = [];
 
+  const colSize = columns.length;
+
   columns.forEach((col, i) => {
     // If visible is false, hide the column. If visible is not defined, default to showing column.
     if (typeof col.visible === 'undefined' || col.visible) {
@@ -184,7 +198,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
     let _rowCssClass = '';
     if (typeof rowCssClass === 'string') {
-        _rowCssClass = rowCssClass;
+      _rowCssClass = rowCssClass;
     }
     else if (typeof rowCssClass === 'function') {
       const renderedClass = rowCssClass(row, index, context && context.toObject());
@@ -255,6 +269,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   });
 
   let createRow: JSX.Element | null = null;
+  let createActionsRow: JSX.Element | null = null;
   let errorRow: JSX.Element | null = null;
 
   if (mode === 'create') {
@@ -286,10 +301,26 @@ const TabletableContainer: FunctionComponent<Props> = ({
       }
     });
 
+    let createActionRow = null;
+    if (createActions) {
+      createActionRow = (
+        <tr className={_rowCssClass}>
+          <td colSpan={colSize} className="create_actions">
+            <div ref={createActionRef}>
+              {createActions}
+            </div>
+          </td>
+        </tr>
+      );
+    }
+
     createRow = (
-      <tr className={_rowCssClass}>
-        {rowComponents}
-      </tr>
+      <>
+        <tr className={_rowCssClass}>
+          {rowComponents}
+        </tr>
+        {createActionRow}
+      </>
     );
 
     if (createError?.errorMessage) {
@@ -374,7 +405,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {showSpinner ? (
         spinner
       ) : (
-          <div className={responsive ? 'table-responsive' : ''}>
+          <div className={responsive ? 'table-responsive' : ''} onScroll={executeScroll}>
             <table className={tableCssClass}>
               <thead>
                 <tr>
@@ -390,7 +421,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
           </div>
         )
       }
-    {pager}
+      {pager}
     </div>
   );
 }
