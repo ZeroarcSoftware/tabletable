@@ -56,7 +56,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   children, // Note: FunctionComponent allows use of children even though we haven't defined them in our Props
   columns,
   containerCssClass = 'tabletable',
-  createError,
+  createError = null,
   currentPage = 1,
   data,
   mode = 'display',

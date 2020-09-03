@@ -12,10 +12,10 @@ export type Context = Immutable.Map<any, any> | Immutable.List<any>;
 // Column specific properties
 export type Column = {
   create?: (fieldError: boolean) => React.ReactNode,
-  data: (Row: any, number: number, Context: any) => React.ReactNode,
+  data?: (Row: any, number: number, Context: any) => React.ReactNode,
   edit?: (Row: any, number: number, Context: any, fieldError: boolean) => React.ReactNode,
   display: string,
-  elementCssClass?: (Row: any, number: number, Context: any) => string,
+  elementCssClass?: ((Row: any, number: number, Context: any) => string) | string, // Can be a string for function that returns a string
   headerCssClass?: string,
   key?: string, // Key is only required when sorting.
   sortable?: boolean,
