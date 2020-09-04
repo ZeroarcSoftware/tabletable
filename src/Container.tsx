@@ -25,8 +25,9 @@ type Props = {
   data: Data,
   pagerSize: number,
   rowsPerPage: number,
-
   // Optional
+  addActionWidth?: number,
+  createActions?: any,
   createMode?: boolean,
   createError?: RowError,
   containerCssClass?: string,
@@ -53,9 +54,11 @@ type Props = {
 }
 
 const TabletableContainer: FunctionComponent<Props> = ({
+  addActionWidth = 500, // Default width of add actions
   children, // Note: FunctionComponent allows use of children even though we haven't defined them in our Props
   columns,
   containerCssClass = 'tabletable',
+  createActions = null,
   createError = null,
   currentPage = 1,
   data,
@@ -78,7 +81,11 @@ const TabletableContainer: FunctionComponent<Props> = ({
   tableCssClass = 'table table-striped table-bordered table-hover',
   totalRows,
 }) => {
+
   const [formFilterValue, setFilterValue] = useState(filterValue);
+
+  // Scroll events for add action buttons when defined.
+  const [addActionPosition, setaddActionPosition] = useState(0);
 
   // Track filterValue changes and reset the state to the passed in value
   // if it changes
@@ -86,6 +93,13 @@ const TabletableContainer: FunctionComponent<Props> = ({
     setFilterValue(filterValue);
   }, [filterValue]);
 
+  // Scrolling actions for add buttons.
+  const executeScroll = (e) => {
+    let element = e.target;
+    if ((element.scrollLeft - element.clientWidth) < addActionWidth) {
+      setaddActionPosition(element.scrollLeft);
+    }
+  }
   //#region Event Handlers
 
   const handlePageChange = (pageNumber: number) => {
@@ -145,6 +159,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   let headerComponents: JSX.Element[] = [];
 
+  const colSize = columns.length;
+
   columns.forEach((col, i) => {
     // If visible is false, hide the column. If visible is not defined, default to showing column.
     if (typeof col.visible === 'undefined' || col.visible) {
@@ -184,7 +200,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
     let _rowCssClass = '';
     if (typeof rowCssClass === 'string') {
-        _rowCssClass = rowCssClass;
+      _rowCssClass = rowCssClass;
     }
     else if (typeof rowCssClass === 'function') {
       const renderedClass = rowCssClass(row, index, context && context.toObject());
@@ -255,6 +271,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   });
 
   let createRow: JSX.Element | null = null;
+  let createActionsRow: JSX.Element | null = null;
   let errorRow: JSX.Element | null = null;
 
   if (mode === 'create') {
@@ -286,10 +303,32 @@ const TabletableContainer: FunctionComponent<Props> = ({
       }
     });
 
+    var addActionStyles = {
+      left: addActionPosition,
+      position: 'relative',
+      width: addActionWidth
+    } as React.CSSProperties; // See https://stackoverflow.com/questions/46710747/type-string-is-not-assignable-to-type-inherit-initial-unset-fixe
+
+    let createActionRow = null;
+    if (createActions) {
+      createActionRow = (
+        <tr className={_rowCssClass}>
+          <td colSpan={colSize}>
+            <div style={addActionStyles}>
+              {createActions}
+            </div>
+          </td>
+        </tr>
+      );
+    };
+
     createRow = (
-      <tr className={_rowCssClass}>
-        {rowComponents}
-      </tr>
+      <>
+        <tr className={_rowCssClass}>
+          {rowComponents}
+        </tr>
+        {createActionRow}
+      </>
     );
 
     if (createError?.errorMessage) {
@@ -374,7 +413,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {showSpinner ? (
         spinner
       ) : (
-          <div className={responsive ? 'table-responsive' : ''}>
+          <div className={responsive ? 'table-responsive' : ''} onScroll={mode === 'create' && createActions ? executeScroll : undefined}>
             <table className={tableCssClass}>
               <thead>
                 <tr>
@@ -390,7 +429,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
           </div>
         )
       }
-    {pager}
+      {pager}
     </div>
   );
 }
