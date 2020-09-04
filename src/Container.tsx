@@ -26,6 +26,8 @@ type Props = {
   pagerSize: number,
   rowsPerPage: number,
 
+  addActionWidth: number,
+
   // Optional
   createActions?: any,
   createMode?: boolean,
@@ -54,6 +56,7 @@ type Props = {
 }
 
 const TabletableContainer: FunctionComponent<Props> = ({
+  addActionWidth = 500, // Default for Candid action width
   children, // Note: FunctionComponent allows use of children even though we haven't defined them in our Props
   columns,
   containerCssClass = 'tabletable',
@@ -80,7 +83,10 @@ const TabletableContainer: FunctionComponent<Props> = ({
   tableCssClass = 'table table-striped table-bordered table-hover',
   totalRows,
 }) => {
+
   const [formFilterValue, setFilterValue] = useState(filterValue);
+
+  const [addActionPosition, setaddActionPosition] = useState(0);
 
   // Track filterValue changes and reset the state to the passed in value
   // if it changes
@@ -88,15 +94,12 @@ const TabletableContainer: FunctionComponent<Props> = ({
     setFilterValue(filterValue);
   }, [filterValue]);
 
-  const createActionRef = useRef(null);
-  const scrollToRef = (ref, leftPos) => {
-    //ref.scrollTo(0, ref.current.offsetTop)
-  };
+  // Scrolling actions for add buttons.
   const executeScroll = (e) => {
     let element = e.target;
-    let tableAbsLeft = element.scrollLeft;
-    console.log('this is left offset', tableAbsLeft);
-    scrollToRef(createActionRef, tableAbsLeft);
+    if ((element.scrollLeft - element.clientWidth) < addActionWidth) {
+      setaddActionPosition(element.scrollLeft);
+    }
   }
   //#region Event Handlers
 
@@ -301,18 +304,24 @@ const TabletableContainer: FunctionComponent<Props> = ({
       }
     });
 
+    var divStyle = {
+      left: addActionPosition,
+      position: 'relative',
+      width: addActionWidth
+    } as React.CSSProperties; // See https://stackoverflow.com/questions/46710747/type-string-is-not-assignable-to-type-inherit-initial-unset-fixe
+
     let createActionRow = null;
     if (createActions) {
       createActionRow = (
         <tr className={_rowCssClass}>
           <td colSpan={colSize} className="create_actions">
-            <div ref={createActionRef}>
+            <div style={divStyle}>
               {createActions}
             </div>
           </td>
         </tr>
       );
-    }
+    };
 
     createRow = (
       <>
@@ -405,7 +414,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {showSpinner ? (
         spinner
       ) : (
-          <div className={responsive ? 'table-responsive' : ''} onScroll={executeScroll}>
+          <div className={responsive ? 'table-responsive' : ''} onScroll={mode === 'create' ? executeScroll : undefined }>
             <table className={tableCssClass}>
               <thead>
                 <tr>
