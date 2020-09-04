@@ -1,7 +1,7 @@
 // Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect, useRef } from 'react';
+import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
@@ -54,7 +54,7 @@ type Props = {
 }
 
 const TabletableContainer: FunctionComponent<Props> = ({
-  addActionWidth = 500, // Default for Candid action width
+  addActionWidth = 500, // Default width of add actions
   children, // Note: FunctionComponent allows use of children even though we haven't defined them in our Props
   columns,
   containerCssClass = 'tabletable',
