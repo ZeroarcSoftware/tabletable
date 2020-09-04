@@ -25,10 +25,8 @@ type Props = {
   data: Data,
   pagerSize: number,
   rowsPerPage: number,
-
-  addActionWidth: number,
-
   // Optional
+  addActionWidth?: number,
   createActions?: any,
   createMode?: boolean,
   createError?: RowError,
@@ -86,6 +84,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   const [formFilterValue, setFilterValue] = useState(filterValue);
 
+  // Scroll events for add action buttons when defined.
   const [addActionPosition, setaddActionPosition] = useState(0);
 
   // Track filterValue changes and reset the state to the passed in value
@@ -304,7 +303,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       }
     });
 
-    var divStyle = {
+    var addActionStyles = {
       left: addActionPosition,
       position: 'relative',
       width: addActionWidth
@@ -314,8 +313,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
     if (createActions) {
       createActionRow = (
         <tr className={_rowCssClass}>
-          <td colSpan={colSize} className="create_actions">
-            <div style={divStyle}>
+          <td colSpan={colSize}>
+            <div style={addActionStyles}>
               {createActions}
             </div>
           </td>
@@ -414,7 +413,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {showSpinner ? (
         spinner
       ) : (
-          <div className={responsive ? 'table-responsive' : ''} onScroll={mode === 'create' ? executeScroll : undefined }>
+          <div className={responsive ? 'table-responsive' : ''} onScroll={mode === 'create' && createActions ? executeScroll : undefined}>
             <table className={tableCssClass}>
               <thead>
                 <tr>
