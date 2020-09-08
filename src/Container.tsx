@@ -54,7 +54,7 @@ type Props = {
 }
 
 const TabletableContainer: FunctionComponent<Props> = ({
-  addActionWidth = 500, // Default width of add actions
+  addActionWidth = 700, // Default width of add actions
   children, // Note: FunctionComponent allows use of children even though we haven't defined them in our Props
   columns,
   containerCssClass = 'tabletable',
@@ -84,22 +84,11 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   const [formFilterValue, setFilterValue] = useState(filterValue);
 
-  // Scroll events for add action buttons when defined.
-  const [addActionPosition, setaddActionPosition] = useState(0);
-
   // Track filterValue changes and reset the state to the passed in value
   // if it changes
   useEffect(() => {
     setFilterValue(filterValue);
   }, [filterValue]);
-
-  // Scrolling actions for add buttons.
-  const executeScroll = (e) => {
-    let element = e.target;
-    if ((element.scrollLeft - element.clientWidth) < addActionWidth) {
-      setaddActionPosition(element.scrollLeft);
-    }
-  }
   //#region Event Handlers
 
   const handlePageChange = (pageNumber: number) => {
@@ -304,8 +293,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
     });
 
     var addActionStyles = {
-      left: addActionPosition,
-      position: 'relative',
+      left: 0,
+      position: 'sticky',
       width: addActionWidth
     } as React.CSSProperties; // See https://stackoverflow.com/questions/46710747/type-string-is-not-assignable-to-type-inherit-initial-unset-fixe
 
@@ -413,7 +402,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {showSpinner ? (
         spinner
       ) : (
-          <div className={responsive ? 'table-responsive' : ''} onScroll={mode === 'create' && createActions ? executeScroll : undefined}>
+          <div className={responsive ? 'table-responsive' : ''}>
             <table className={tableCssClass}>
               <thead>
                 <tr>
