@@ -1,7 +1,7 @@
 // Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect } from 'react';
+import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect, useRef } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
@@ -96,6 +96,16 @@ const TabletableContainer: FunctionComponent<Props> = ({
       onPageChange(pageNumber);
     }
   };
+
+  const scrollingElementRef = useRef(null);
+
+  const [visibleWidth, setvisibleWidth] = useState(0);
+
+  useEffect(() => {
+    if (scrollingElementRef.current) {
+      setvisibleWidth(scrollingElementRef.current.clientWidth - addActionWidth);
+    }
+  }, [scrollingElementRef.current]);
 
   // Call external onSearch if pased
   const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -241,7 +251,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     const errorRow = error
       ? (
         <tr key={`td-${index}-error`}>
-          <td colSpan={columns.length} className='text-danger'>
+          <td colSpan={columns.length} className='text-danger'>This is the edit eddott
             <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {error.errorMessage}
           </td>
         </tr>
@@ -261,7 +271,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   let createRow: JSX.Element | null = null;
   let createActionsRow: JSX.Element | null = null;
-  let errorRow: JSX.Element | null = null;
+  let errorMsg: JSX.Element | null = null;
 
   if (mode === 'create') {
     let _rowCssClass = '';
@@ -293,19 +303,45 @@ const TabletableContainer: FunctionComponent<Props> = ({
     });
 
     var addActionStyles = {
-      left: 0,
+      left: visibleWidth,
       position: 'sticky',
       width: addActionWidth
     } as React.CSSProperties; // See https://stackoverflow.com/questions/46710747/type-string-is-not-assignable-to-type-inherit-initial-unset-fixe
 
+    var errorMsgStyles = {
+      float: 'left',
+      left: 0,
+      position: 'sticky'
+    } as React.CSSProperties; // See https://stackoverflow.com/questions/46710747/type-string-is-not-assignable-to-type-inherit-initial-unset-fixe
+
     let createActionRow = null;
+
+    if (createError?.errorMessage) {
+      errorMsg = (
+        <div className='text-danger add_error'><FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}</div>
+      );
+    }
+    //   (
+    //     <tr className={_rowCssClass}>
+    //       <td className='text-danger' colSpan={columns.length}>
+    //         <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}
+    //       </td>
+    //     </tr>
+    //   );
+    // }
+
     if (createActions) {
       createActionRow = (
         <tr className={_rowCssClass}>
           <td colSpan={colSize}>
-            <div style={addActionStyles}>
-              {createActions}
-            </div>
+            <>
+              <div style={addActionStyles}>
+                {createActions}
+              </div>
+              <div style={errorMsgStyles}>
+                {errorMsg}
+              </div>
+            </>
           </td>
         </tr>
       );
@@ -320,15 +356,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
       </>
     );
 
-    if (createError?.errorMessage) {
-      errorRow = (
-        <tr className={_rowCssClass}>
-          <td className='text-danger' colSpan={columns.length}>
-            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}
-          </td>
-        </tr>
-      );
-    }
   }
 
 
@@ -402,7 +429,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {showSpinner ? (
         spinner
       ) : (
-          <div className={responsive ? 'table-responsive' : ''}>
+          <div className={responsive ? 'table-responsive' : ''} ref={scrollingElementRef}>
             <table className={tableCssClass}>
               <thead>
                 <tr>
@@ -411,7 +438,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
               </thead>
               <tbody>
                 {mode === 'create' && createRow}
-                {mode === 'create' && errorRow}
                 {rows.toList()}
               </tbody>
             </table>
