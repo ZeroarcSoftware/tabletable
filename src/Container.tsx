@@ -94,8 +94,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
   }, [filterValue]);
 
   // Scrolling actions for add buttons.
-  const executeScroll = (e) => {
-    let element = e.target;
+  const executeScroll = (e: React.UIEvent<HTMLElement>) => {
+    let element = e.currentTarget;
     if ((element.scrollLeft - element.clientWidth) < addActionWidth) {
       setaddActionPosition(element.scrollLeft);
     }
