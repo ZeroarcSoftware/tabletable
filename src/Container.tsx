@@ -1,7 +1,7 @@
 // Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect, useRef } from 'react';
+import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
@@ -241,7 +241,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     const errorRow = error
       ? (
         <tr key={`td-${index}-error`}>
-          <td colSpan={columns.length} className='text-danger'>This is the edit eddott
+          <td colSpan={columns.length} className='text-danger'>
             <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {error.errorMessage}
           </td>
         </tr>
