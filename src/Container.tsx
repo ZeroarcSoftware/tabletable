@@ -89,6 +89,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   useEffect(() => {
     setFilterValue(filterValue);
   }, [filterValue]);
+
   //#region Event Handlers
 
   const handlePageChange = (pageNumber: number) => {
