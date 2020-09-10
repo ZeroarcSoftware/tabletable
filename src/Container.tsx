@@ -330,9 +330,9 @@ const TabletableContainer: FunctionComponent<Props> = ({
         </tr>
       );
     }
-    // Assume we want an error row if no add actions are defined.
+    // Create error row when no inline actions are defined.
     else if (createError?.errorMessage) {
-      (
+      createActionRow = (
         <tr className={_rowCssClass}>
           <td className='text-danger' colSpan={columns.length}>
             <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}
