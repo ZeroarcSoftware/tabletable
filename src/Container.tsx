@@ -54,7 +54,7 @@ type Props = {
 }
 
 const TabletableContainer: FunctionComponent<Props> = ({
-  addActionWidth = 500, // Default width of add actions
+  addActionWidth = 700, // Default width of add actions
   children, // Note: FunctionComponent allows use of children even though we haven't defined them in our Props
   columns,
   containerCssClass = 'tabletable',
@@ -84,22 +84,12 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   const [formFilterValue, setFilterValue] = useState(filterValue);
 
-  // Scroll events for add action buttons when defined.
-  const [addActionPosition, setaddActionPosition] = useState(0);
-
   // Track filterValue changes and reset the state to the passed in value
   // if it changes
   useEffect(() => {
     setFilterValue(filterValue);
   }, [filterValue]);
 
-  // Scrolling actions for add buttons.
-  const executeScroll = (e: React.UIEvent<HTMLElement>) => {
-    let element = e.currentTarget;
-    if ((element.scrollLeft - element.clientWidth) < addActionWidth) {
-      setaddActionPosition(element.scrollLeft);
-    }
-  }
   //#region Event Handlers
 
   const handlePageChange = (pageNumber: number) => {
@@ -272,7 +262,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   let createRow: JSX.Element | null = null;
   let createActionsRow: JSX.Element | null = null;
-  let errorRow: JSX.Element | null = null;
+  let errorMsg: JSX.Element | null = null;
 
   if (mode === 'create') {
     let _rowCssClass = '';
@@ -304,23 +294,53 @@ const TabletableContainer: FunctionComponent<Props> = ({
     });
 
     var addActionStyles = {
-      left: addActionPosition,
-      position: 'relative',
+      float: 'right',
+      position: 'sticky',
+      right: 0,
       width: addActionWidth
+    } as React.CSSProperties;
+
+    var errorMsgStyles = {
+      float: 'left',
+      left: 0,
+      marginTop: '0.2em',
+      position: 'sticky'
     } as React.CSSProperties; // See https://stackoverflow.com/questions/46710747/type-string-is-not-assignable-to-type-inherit-initial-unset-fixe
 
     let createActionRow = null;
+
+    if (createError?.errorMessage) {
+      errorMsg = (
+        <div className='text-danger add_error'><FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}</div>
+      );
+    }
+
     if (createActions) {
       createActionRow = (
         <tr className={_rowCssClass}>
           <td colSpan={colSize}>
-            <div style={addActionStyles}>
-              {createActions}
-            </div>
+            <>
+              <div style={addActionStyles}>
+                {createActions}
+              </div>
+              <div style={errorMsgStyles}>
+                {errorMsg}
+              </div>
+            </>
           </td>
         </tr>
       );
-    };
+    }
+    // Create error row when no inline actions are defined.
+    else if (createError?.errorMessage) {
+      createActionRow = (
+        <tr className={_rowCssClass}>
+          <td className='text-danger' colSpan={columns.length}>
+            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}
+          </td>
+        </tr>
+      );
+    }
 
     createRow = (
       <>
@@ -331,15 +351,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
       </>
     );
 
-    if (createError?.errorMessage) {
-      errorRow = (
-        <tr className={_rowCssClass}>
-          <td className='text-danger' colSpan={columns.length}>
-            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}
-          </td>
-        </tr>
-      );
-    }
   }
 
 
@@ -413,7 +424,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {showSpinner ? (
         spinner
       ) : (
-          <div className={responsive ? 'table-responsive' : ''} onScroll={mode === 'create' && createActions ? executeScroll : undefined}>
+          <div className={responsive ? 'table-responsive' : ''}>
             <table className={tableCssClass}>
               <thead>
                 <tr>
@@ -422,7 +433,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
               </thead>
               <tbody>
                 {mode === 'create' && createRow}
-                {mode === 'create' && errorRow}
                 {rows.toList()}
               </tbody>
             </table>
