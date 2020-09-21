@@ -6,8 +6,12 @@ import Immutable from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSort, faTimes, faSearch, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSort} from '@fortawesome/free-solid-svg-icons/faSort';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
+import { faSortDown } from '@fortawesome/free-solid-svg-icons/faSortDown';
+import { faSortUp } from '@fortawesome/free-solid-svg-icons/faSortUp';
 library.add(
   faSort,
   faSortDown,
