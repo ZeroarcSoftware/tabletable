@@ -7,7 +7,7 @@ export type Data = Immutable.List<Immutable.Map<string, any>>;
 
 export type Row = Immutable.Map<string, any>;
 
-export type Context = Immutable.Map<any, any> | Immutable.List<any>;
+export type Context = any;
 
 // Column specific properties
 export type Column = {

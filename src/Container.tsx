@@ -131,7 +131,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
     // Reset to first page to re-orient user
     if (formFilterValue) {
       setFilterValue('');
-      handlePageChange(1);
       onClear && onClear();
     }
   };
@@ -139,7 +138,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handlePageChange(1);
       onSearch && onSearch(formFilterValue);
     }
   };
