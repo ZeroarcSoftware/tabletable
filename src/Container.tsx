@@ -128,11 +128,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   const handleClearFilterClick = (e: SyntheticEvent) => {
     e.preventDefault();
-    // Reset to first page to re-orient user
-    if (formFilterValue) {
-      setFilterValue('');
-      onClear && onClear();
-    }
+    setFilterValue('');
+    onClear && onClear();
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
