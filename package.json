@@ -10,7 +10,8 @@
     "demo-build": "$(npm bin)/webpack",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "tsc",
+    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d dist/ --extensions '.ts,.tsx'"
   },
   "repository": {
     "type": "git",
