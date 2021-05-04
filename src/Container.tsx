@@ -89,8 +89,9 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const [formFilterValue, setFilterValue] = useState(filterValue);
   const [tableWidth, setTableWidth] = useState(0);
 
-  const responsiveTableRef = useRef(null);
-  const scrollerRef = useRef(null);
+  const responsiveTableRef = useRef<HTMLDivElement | null>(null);
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const scrollLock = useRef(false);
 
   const callbackTableRef = useCallback(node => {
     if (node !== null) {
@@ -152,12 +153,24 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   // Keep top scroll controller and master table scrollbar on bottom in sync.
   const handleScrollControlScroll = (e: React.UIEvent<HTMLElement>): void => {
-    if (responsiveTableRef.current)
+    if (responsive && !scrollLock.current && responsiveTableRef?.current) {
+      scrollLock.current = true;
       responsiveTableRef.current.scrollLeft = e.currentTarget.scrollLeft;
+
+      setTimeout(() => {
+        scrollLock.current = false;
+      }, 1);
+    }
   }
   const handleTableScroll = (e: React.UIEvent<HTMLElement>): void => {
-    if (responsive && scrollerRef.current)
+    if (responsive && !scrollLock.current && scrollerRef?.current) {
+      scrollLock.current = true;
       scrollerRef.current.scrollLeft = e.currentTarget.scrollLeft;
+      
+      setTimeout(() => {
+        scrollLock.current = false;
+      }, 10);
+    }
   }
 
   //#endregion
@@ -281,7 +294,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
   });
 
   let createRow: JSX.Element | null = null;
-  let createActionsRow: JSX.Element | null = null;
   let errorMsg: JSX.Element | null = null;
 
   if (mode === 'create') {
@@ -432,7 +444,11 @@ const TabletableContainer: FunctionComponent<Props> = ({
     )
     : '';
 
-  const scrollControl = <div className="scroll-control" onScroll={handleScrollControlScroll} ref={scrollerRef}><div id="scroller" style={{ width: tableWidth }}></div></div>;
+  const scrollControl = (
+    <div className="scroll-control mb-3" onScroll={handleScrollControlScroll} ref={scrollerRef}>
+      <div id="scroller" style={{ width: tableWidth }}></div>
+    </div>
+  );
 
   return (
     <div className={containerCssClass}>
