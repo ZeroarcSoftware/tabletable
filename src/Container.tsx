@@ -1,13 +1,13 @@
 // Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect } from 'react';
+import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect, useRef, useCallback } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSort} from '@fortawesome/free-solid-svg-icons/faSort';
+import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons/faSortDown';
@@ -87,9 +87,21 @@ const TabletableContainer: FunctionComponent<Props> = ({
 }) => {
 
   const [formFilterValue, setFilterValue] = useState(filterValue);
+  const [tableWidth, setTableWidth] = useState(0);
+
+  const responsiveTableRef = useRef<HTMLDivElement | null>(null);
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const scrollLock = useRef(false);
+
+  const callbackTableRef = useCallback(node => {
+    if (node !== null) {
+      responsiveTableRef.current = node;
+      setTableWidth(node.scrollWidth + 5);
+    }
+  }, []);
 
   // Track filterValue changes and reset the state to the passed in value
-  // if it changes
+  // if it changes.
   useEffect(() => {
     setFilterValue(filterValue);
   }, [filterValue]);
@@ -138,6 +150,28 @@ const TabletableContainer: FunctionComponent<Props> = ({
       onSearch && onSearch(formFilterValue);
     }
   };
+
+  // Keep top scroll controller and master table scrollbar on bottom in sync.
+  const handleScrollControlScroll = (e: React.UIEvent<HTMLElement>): void => {
+    if (responsive && !scrollLock.current && responsiveTableRef?.current) {
+      scrollLock.current = true;
+      responsiveTableRef.current.scrollLeft = e.currentTarget.scrollLeft;
+
+      setTimeout(() => {
+        scrollLock.current = false;
+      }, 1);
+    }
+  }
+  const handleTableScroll = (e: React.UIEvent<HTMLElement>): void => {
+    if (responsive && !scrollLock.current && scrollerRef?.current) {
+      scrollLock.current = true;
+      scrollerRef.current.scrollLeft = e.currentTarget.scrollLeft;
+      
+      setTimeout(() => {
+        scrollLock.current = false;
+      }, 10);
+    }
+  }
 
   //#endregion
 
@@ -260,7 +294,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
   });
 
   let createRow: JSX.Element | null = null;
-  let createActionsRow: JSX.Element | null = null;
   let errorMsg: JSX.Element | null = null;
 
   if (mode === 'create') {
@@ -411,6 +444,12 @@ const TabletableContainer: FunctionComponent<Props> = ({
     )
     : '';
 
+  const scrollControl = (
+    <div className="scroll-control mb-3" onScroll={handleScrollControlScroll} ref={scrollerRef}>
+      <div id="scroller" style={{ width: tableWidth }}></div>
+    </div>
+  );
+
   return (
     <div className={containerCssClass}>
       <div className='row'>
@@ -423,7 +462,9 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {showSpinner ? (
         spinner
       ) : (
-          <div className={responsive ? 'table-responsive' : ''}>
+        <>
+          {responsive ? scrollControl : null}
+          <div className={responsive ? 'table-responsive' : ''} ref={callbackTableRef} onScroll={handleTableScroll}>
             <table className={tableCssClass}>
               <thead>
                 <tr>
@@ -436,7 +477,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
               </tbody>
             </table>
           </div>
-        )
+        </>
+      )
       }
       {pager}
     </div>
