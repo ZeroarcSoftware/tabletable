@@ -92,6 +92,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const responsiveTableRef = useRef<HTMLDivElement | null>(null);
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const scrollLock = useRef(false);
+  const scrollLeft = useRef(0);
 
   const callbackTableRef = useCallback(node => {
     if (node !== null) {
@@ -105,6 +106,12 @@ const TabletableContainer: FunctionComponent<Props> = ({
   useEffect(() => {
     setFilterValue(filterValue);
   }, [filterValue]);
+  
+  useEffect(() => {
+    if (responsive && !showSpinner && scrollLeft?.current > 0 && responsiveTableRef?.current)
+      responsiveTableRef.current.scrollLeft = scrollLeft.current;
+
+  }, [showSpinner]);
 
   //#region Event Handlers
 
@@ -155,23 +162,28 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const handleScrollControlScroll = (e: React.UIEvent<HTMLElement>): void => {
     if (responsive && !scrollLock.current && responsiveTableRef?.current) {
       scrollLock.current = true;
-      responsiveTableRef.current.scrollLeft = e.currentTarget.scrollLeft;
+      const left = e.currentTarget.scrollLeft;
+      responsiveTableRef.current.scrollLeft = left;
 
       setTimeout(() => {
+        scrollLeft.current = left;
         scrollLock.current = false;
       }, 1);
     }
-  }
+  };
+
   const handleTableScroll = (e: React.UIEvent<HTMLElement>): void => {
     if (responsive && !scrollLock.current && scrollerRef?.current) {
       scrollLock.current = true;
-      scrollerRef.current.scrollLeft = e.currentTarget.scrollLeft;
+      const left = e.currentTarget.scrollLeft;
+      scrollerRef.current.scrollLeft = left;
       
       setTimeout(() => {
+        scrollLeft.current = left;
         scrollLock.current = false;
-      }, 10);
+      }, 1);
     }
-  }
+  };
 
   //#endregion
 
@@ -236,7 +248,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
     }
 
     if (error && !error.key) {
-      console.log('displaying row error');
       _rowCssClass += ' bg-danger';
     }
 
