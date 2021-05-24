@@ -88,7 +88,9 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   const [formFilterValue, setFilterValue] = useState(filterValue);
   const [tableWidth, setTableWidth] = useState(0);
+  const [showScroll, setShowScroll] = useState(false);
 
+  let resizeTimeout: null | NodeJS.Timeout = null;
   const responsiveTableRef = useRef<HTMLDivElement | null>(null);
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const scrollLock = useRef(false);
@@ -96,8 +98,17 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   const callbackTableRef = useCallback(node => {
     if (node !== null) {
+
       responsiveTableRef.current = node;
-      setTableWidth(node.scrollWidth + 5);
+
+      if (node.scrollWidth === node.clientWidth) {
+        setShowScroll(false);
+      }
+      else {
+        setShowScroll(true);
+        setTableWidth(node.scrollWidth);
+      }
+
     }
   }, []);
 
@@ -106,14 +117,40 @@ const TabletableContainer: FunctionComponent<Props> = ({
   useEffect(() => {
     setFilterValue(filterValue);
   }, [filterValue]);
-  
+
+  // Retain scroll location if defined.
   useEffect(() => {
     if (responsive && !showSpinner && scrollLeft?.current > 0 && responsiveTableRef?.current)
       responsiveTableRef.current.scrollLeft = scrollLeft.current;
-
   }, [showSpinner]);
 
+  useEffect(() => {
+    window.addEventListener('resize', delayedResize);
+    return () => window.removeEventListener('resize', delayedResize);
+  }, []);
+
   //#region Event Handlers
+
+  const delayedResize = () => {
+
+    if (resizeTimeout) {
+      if (responsiveTableRef.current) {
+        // Determine if there should be a scrollbar shown.
+        if (responsiveTableRef.current.scrollWidth === responsiveTableRef.current.clientWidth) {
+          // No scrollbar on table, remove scroll control.
+          setShowScroll(false);
+        }
+        else {
+          // Scrollbar is active, recalculate scroll widths.
+          setShowScroll(true);
+          setTableWidth(responsiveTableRef.current.scrollWidth);
+        }
+      }
+      clearTimeout(resizeTimeout);
+    }
+
+    resizeTimeout = setTimeout(() => { }, 200);
+  };
 
   const handlePageChange = (pageNumber: number) => {
     if (onPageChange) {
@@ -177,7 +214,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       scrollLock.current = true;
       const left = e.currentTarget.scrollLeft;
       scrollerRef.current.scrollLeft = left;
-      
+
       setTimeout(() => {
         scrollLeft.current = left;
         scrollLock.current = false;
@@ -472,23 +509,24 @@ const TabletableContainer: FunctionComponent<Props> = ({
       {pager}
       {showSpinner ? (
         spinner
-      ) : (
-        <>
-          {responsive ? scrollControl : null}
-          <div className={responsive ? 'table-responsive' : ''} ref={callbackTableRef} onScroll={handleTableScroll}>
-            <table className={tableCssClass}>
-              <thead>
-                <tr>
-                  {headerComponents}
-                </tr>
-              </thead>
-              <tbody>
-                {mode === 'create' && createRow}
-                {rows.toList()}
-              </tbody>
-            </table>
-          </div>
-        </>
+      ) : (<>
+        <div className="scroll-container">
+          {responsive && showScroll ? scrollControl : null}
+        </div>
+        <div className={responsive ? 'table-responsive' : ''} ref={callbackTableRef} onScroll={handleTableScroll}>
+          <table className={tableCssClass}>
+            <thead>
+              <tr>
+                {headerComponents}
+              </tr>
+            </thead>
+            <tbody>
+              {mode === 'create' && createRow}
+              {rows.toList()}
+            </tbody>
+          </table>
+        </div>
+      </>
       )
       }
       {pager}
