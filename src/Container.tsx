@@ -97,7 +97,6 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const scrollLeft = useRef(0);
 
   const callbackTableRef = useCallback(node => {
-    console.log('doing things')
     if (node !== null) {
       responsiveTableRef.current = node;
       if (node.scrollWidth === node.clientWidth) {
