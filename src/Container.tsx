@@ -97,10 +97,9 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const scrollLeft = useRef(0);
 
   const callbackTableRef = useCallback(node => {
+    console.log('doing things')
     if (node !== null) {
-
       responsiveTableRef.current = node;
-
       if (node.scrollWidth === node.clientWidth) {
         setShowScroll(false);
       }
@@ -108,9 +107,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
         setShowScroll(true);
         setTableWidth(node.scrollWidth);
       }
-
     }
-  }, []);
+  }, [mode]);
 
   // Track filterValue changes and reset the state to the passed in value
   // if it changes.
