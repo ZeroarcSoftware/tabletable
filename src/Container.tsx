@@ -320,15 +320,14 @@ const TabletableContainer: FunctionComponent<Props> = ({
     const errorRow = error
       ? (
         <tr key={`td-${index}-error`}>
-          <td colSpan={columns.length} className='text-danger'>
-            <div style={{ position: 'absolute', left: scrollLeft.current }} >
+          <td colSpan={columns.length} className='text-danger' style={{ height: '40px' }}>
+            <div style={{ position: 'absolute', left: '20px' }} >
               <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {error.errorMessage}
             </div>
           </td>
         </tr>
       )
       : null;
-
 
     return (
       <React.Fragment key={`tr-${index}`}>
