@@ -264,7 +264,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const rows = data.skip(skipRows).take(takeRows).map((row, index) => {
     // Create row context if required. Make it an immutable so nobody tries to abuse it by shoving stuff into it
     // during a column step. We will re-project from the Immutable each time it is used
-    const context = Immutable.fromJS(rowContext ? rowContext(row, index) : {});
+    const context = Immutable.fromJS(rowContext ? rowContext(row, index) : {}) as any;
     const error = rowContext ? rowContext(row, index)?.error : null;
 
     let _rowCssClass = '';
