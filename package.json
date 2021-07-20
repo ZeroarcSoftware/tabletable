@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/ZeroarcSoftware/tabletable#readme",
   "devDependencies": {
-    "@babel/cli": "^7.13.16",
+    "@babel/cli": "^7.14.5",
     "@babel/core": "^7.14.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/preset-env": "^7.14.0",
