@@ -321,7 +321,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
       ? (
         <tr key={`td-${index}-error`}>
           <td colSpan={columns.length} className='text-danger'>
-            <div style={{ position: 'absolute', left: scrollLeft }} >
+            <div style={{ position: 'absolute', left: scrollLeft.current }} >
               <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {error.errorMessage}
             </div>
           </td>
