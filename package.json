@@ -1,6 +1,6 @@
 {
   "name": "tabletable",
-  "version": "4.10.0",
+  "version": "4.11.0",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
   "types": "dist/Container.d.ts",
@@ -38,7 +38,7 @@
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
     "babel-loader": "^8.2.2",
-    "source-map-loader": "^2.0.1",
+    "source-map-loader": "^3.0.0",
     "ts-loader": "^9.1.1",
     "typescript": "^4.2.4",
     "webpack": "^5.36.1",
