@@ -62,7 +62,7 @@ const TabletablePager: FunctionComponent<Props> = ({
     const thisButtonClasses = ClassNames('btn btn-sm', {
       'btn-primary': currentPage === i,
       'btn-outline-secondary': currentPage !== i,
-      'mr-1': i !== endIndex
+      'me-1': i !== endIndex
     });
     options.push(
       <button key={`option-${i}`}
