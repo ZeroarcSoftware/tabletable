@@ -86,7 +86,7 @@ const TabletablePager: FunctionComponent<Props> = ({
         <button className='btn btn-outline-secondary btn-sm' onClick={nextPageChange}><i className='far fa-chevron-right'></i> Next</button>
       </div>
 
-      <div className='col-3 text-right' role='group'>
+      <div className='col-3 text-end' role='group'>
         <button className='btn btn-outline-secondary btn-sm' onClick={lastPageChange}><i className='far fa-step-forward'></i> Last</button>
       </div>
     </div>
