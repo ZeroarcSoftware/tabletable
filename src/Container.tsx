@@ -476,15 +476,13 @@ const TabletableContainer: FunctionComponent<Props> = ({
     ? (
       <div className={filterClasses}>
         <div className='input-group'>
-          <button className={clearClasses} style={{ position: 'absolute', right: '45px', top: '3px', zIndex: 10 }} onClick={handleClearFilterClick}>
+          <button className={clearClasses} style={{ position: 'absolute', right: '47px', top: '3px', borderRadius: '0.2rem', zIndex: 10 }} onClick={handleClearFilterClick}>
             <FontAwesomeIcon icon={['fas', 'times']} fixedWidth /> Clear
           </button>
           <input type='text' className='form-control' placeholder='Type to filter' value={formFilterValue} onChange={e => setFilterValue(e.target.value)} onKeyPress={handleKeyPress} />
-          <div className="input-group-append">
-            <button className={filterButtonClasses} onClick={handleSearchClick}>
-              <FontAwesomeIcon icon={['fas', 'search']} fixedWidth />
-            </button>
-          </div>
+          <button className={filterButtonClasses} onClick={handleSearchClick}>
+            <FontAwesomeIcon icon={['fas', 'search']} fixedWidth />
+          </button>
         </div>
       </div>
     )
