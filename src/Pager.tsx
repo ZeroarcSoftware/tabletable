@@ -1,6 +1,7 @@
 // Tabletable - Copyright 2018 Zeroarc Software, LLC
 'use strict';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ClassNames from 'classnames';
 import React, { SyntheticEvent, FunctionComponent } from 'react';
 
@@ -17,10 +18,10 @@ const TabletablePager: FunctionComponent<Props> = ({
   currentPage = 1,
   onPageChange }) => {
 
-  const pageChange = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const pageChange = (e: SyntheticEvent) => {
     e.preventDefault();
-    const el = e.target as HTMLInputElement;
-    const page = parseInt(el.getAttribute('data-value') || '');
+    // const el = e.target as HTMLInputElement;
+    const page = parseInt(e.currentTarget.getAttribute('data-value') || '');
     if (!isNaN(page))
       onPageChange(page);
   }
@@ -59,37 +60,56 @@ const TabletablePager: FunctionComponent<Props> = ({
   }
 
   for (let i = startIndex; i <= endIndex; i++) {
-    const thisButtonClasses = ClassNames('btn btn-sm', {
-      'btn-primary': currentPage === i,
-      'btn-outline-secondary': currentPage !== i,
-      'me-1': i !== endIndex
+    const thisButtonClasses = ClassNames('page-item', {
+      'active': currentPage === i,
     });
     options.push(
-      <button key={`option-${i}`}
+      <li key={`option-${i}`}
         className={thisButtonClasses}
-        style={{ minWidth: '2.5em' }}
-        data-value={i}
-        onClick={pageChange}>{i}</button>
+        aria-current={currentPage === i ? 'page' : false}
+        data-value={i}>
+          <a href='#' onClick={pageChange} className='page-link'>{i}</a>
+      </li>
     );
   }
 
-  return (
-    <div className='row btn-toolbar my-3' role='toolbar'>
-      <div className='col-3' role='group'>
-        <button className='btn btn-outline-secondary btn-sm' onClick={firstPageChange}><i className='far fa-step-backward'></i> First</button>
-      </div>
-      <div className='col-6 text-center' role='group'>
-        <button className='btn btn-outline-secondary btn-sm' onClick={previousPageChange}><i className='far fa-chevron-left'></i> Prev</button>
-        <div className='mx-2' style={{ display: 'inline-block' }}>
-          {options}
-        </div>
-        <button className='btn btn-outline-secondary btn-sm' onClick={nextPageChange}><i className='far fa-chevron-right'></i> Next</button>
-      </div>
+  const backButtonClasses = ClassNames('page-item', {
+    'disabled': currentPage === 1,
+  });
 
-      <div className='col-3 text-end' role='group'>
-        <button className='btn btn-outline-secondary btn-sm' onClick={lastPageChange}><i className='far fa-step-forward'></i> Last</button>
-      </div>
-    </div>
+  const forwardButtonClasses = ClassNames('page-item', {
+    'disabled': currentPage === maxPage,
+  });
+ 
+
+  return (
+    <nav aria-label='Table navigation'> 
+      <ul className='pagination pagination-sm justify-content-center mb-0'>
+        <li className={backButtonClasses}>
+          <a href='#' onClick={firstPageChange} className='page-link' aria-label='First'>
+            <FontAwesomeIcon icon={['far', 'step-backward']} fixedWidth aria-hidden='true' /> 
+          </a>
+        </li>
+        <li className={backButtonClasses}>
+          <a href='#' onClick={previousPageChange} className='page-link' aria-label='Previous'>
+            <FontAwesomeIcon icon={['far', 'chevron-left']} fixedWidth aria-hidden='true' /> 
+          </a>
+        </li>
+
+        {options}
+
+        <li className={forwardButtonClasses}>
+          <a href='#' onClick={nextPageChange} className='page-link' aria-label='Next'>
+            <FontAwesomeIcon icon={['far', 'chevron-right']} fixedWidth aria-hidden='true' /> 
+          </a>
+        </li>
+        <li className={forwardButtonClasses}>
+          <a href='#' onClick={lastPageChange} className='page-link' aria-label='Last'>
+            <FontAwesomeIcon icon={['far', 'step-forward']} fixedWidth aria-hidden='true' /> 
+          </a>
+        </li>
+      </ul>
+    </nav>
   );
 };
 

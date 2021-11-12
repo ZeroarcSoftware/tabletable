@@ -82,7 +82,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   spinner,
   sortCriteria,
   responsive = false,
-  tableCssClass = 'table table-striped table-bordered table-hover',
+  tableCssClass = 'table table-striped table-bordered table-hover mb-1',
   totalRows,
 }) => {
 
@@ -489,7 +489,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     : '';
 
   const scrollControl = (
-    <div className="scroll-control mb-3" onScroll={handleScrollControlScroll} ref={scrollerRef}>
+    <div className="scroll-control mb-2" onScroll={handleScrollControlScroll} ref={scrollerRef}>
       <div id="scroller" style={{ width: tableWidth }}></div>
     </div>
   );
@@ -502,7 +502,9 @@ const TabletableContainer: FunctionComponent<Props> = ({
         </div>
         {filterControl}
       </div>
-      {pager}
+      <div className='mb-2'>
+        {pager}
+      </div>
       {showSpinner ? (
         spinner
       ) : (<>
@@ -523,9 +525,10 @@ const TabletableContainer: FunctionComponent<Props> = ({
           </table>
         </div>
       </>
-      )
-      }
-      {pager}
+      )}
+      <div className='mt-2'>
+        {pager}
+      </div>
     </div>
   );
 }
