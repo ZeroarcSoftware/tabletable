@@ -20,10 +20,14 @@ const TabletablePager: FunctionComponent<Props> = ({
 
   const pageChange = (e: SyntheticEvent) => {
     e.preventDefault();
-    // const el = e.target as HTMLInputElement;
-    const page = parseInt(e.currentTarget.getAttribute('data-value') || '');
-    if (!isNaN(page))
-      onPageChange(page);
+    
+    const el = e.currentTarget.parentElement;
+    if (el) {
+      const page = parseInt(el.getAttribute('data-value') || '');
+
+      if (!isNaN(page))
+        onPageChange(page);
+    }
   }
 
   const previousPageChange = (e: SyntheticEvent) => {
