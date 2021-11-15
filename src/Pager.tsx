@@ -78,11 +78,11 @@ const TabletablePager: FunctionComponent<Props> = ({
   }
 
   const backButtonClasses = ClassNames('page-item', {
-    'disabled': currentPage === 1,
+    'disabled': currentPage === 1 || endIndex === 0,
   });
 
   const forwardButtonClasses = ClassNames('page-item', {
-    'disabled': currentPage === maxPage,
+    'disabled': currentPage === maxPage || endIndex === 0,
   });
  
 
