@@ -378,18 +378,13 @@ const TabletableContainer: FunctionComponent<Props> = ({
       width: addActionWidth
     } as React.CSSProperties;
 
-    var errorMsgStyles = {
-      float: 'left',
-      left: 0,
-      marginTop: '0.2em',
-      position: 'sticky'
-    } as React.CSSProperties; // See https://stackoverflow.com/questions/46710747/type-string-is-not-assignable-to-type-inherit-initial-unset-fixe
-
     let createActionRow = null;
 
     if (createError?.errorMessage) {
       errorMsg = (
-        <div className='text-danger add_error'><FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}</div>
+        <div className='text-danger add_error' style={{position: 'fixed'}}>
+          <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}
+        </div>
       );
     }
 
@@ -401,9 +396,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
               <div style={addActionStyles}>
                 {createActions}
               </div>
-              <div style={errorMsgStyles}>
-                {errorMsg}
-              </div>
+              {errorMsg}
             </>
           </td>
         </tr>
@@ -414,7 +407,9 @@ const TabletableContainer: FunctionComponent<Props> = ({
       createActionRow = (
         <tr className={_rowCssClass}>
           <td className='text-danger' colSpan={columns.length}>
-            <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}
+            <div style={{position: 'fixed'}}>
+              <FontAwesomeIcon icon={['far', 'exclamation-triangle']} fixedWidth /> Error: {createError.errorMessage}
+            </div>
           </td>
         </tr>
       );

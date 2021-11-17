@@ -1,6 +1,6 @@
 {
   "name": "tabletable",
-  "version": "4.13.2",
+  "version": "4.13.3",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
   "types": "dist/Container.d.ts",
