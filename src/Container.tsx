@@ -1,7 +1,7 @@
 // Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect, useRef, useCallback } from 'react';
+import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect, useRef, useCallback, ReactComponentElement, Component, ReactNode } from 'react';
 import Immutable from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
@@ -26,6 +26,7 @@ import { Data, Column, Row, Context, SortDirection, TableMode, SortCriteria, Row
 
 type Props = {
   columns: Array<Column>,
+  children: ReactNode, 
   data: Data,
   pagerSize: number,
   rowsPerPage: number,
@@ -96,7 +97,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const scrollLock = useRef(false);
   const scrollLeft = useRef(0);
 
-  const callbackTableRef = useCallback(node => {
+  const callbackTableRef = useCallback((node: HTMLDivElement) => {
     if (node !== null) {
       responsiveTableRef.current = node;
       if (node.scrollWidth === node.clientWidth) {
