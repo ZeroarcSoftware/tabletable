@@ -38,8 +38,8 @@
     "@types/react": "^18.0.1",
     "@types/react-dom": "^18.0.0",
     "babel-loader": "^8.2.2",
+    "react": "^18.1.0",
     "source-map-loader": "^3.0.0",
-    "react": "^18.0.0",
     "ts-loader": "^9.1.1",
     "typescript": "^4.2.4",
     "webpack": "^5.36.1",
@@ -50,7 +50,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "classnames": "^2.3.1",
-    "immutable": "^4.0.0-rc.14"
+    "immutable": "^4.0.0-rc.14",
+    "react-dom": "^18.1.0"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0"
