@@ -1,11 +1,11 @@
 {
   "name": "tabletable",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "A simple and extremely flexible table component written in React.",
   "main": "dist/Container.js",
   "types": "dist/Container.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ --extensions '.ts,.tsx' && tsc",
+    "build": "NODE_ENV=production npx babel src/ -d dist/ --extensions '.ts,.tsx' && npx tsc",
     "check-types": "tsc --noEmit",
     "demo-build": "$(npm bin)/webpack",
     "prepare": "npm run build",
@@ -31,6 +31,7 @@
     "@babel/cli": "^7.14.5",
     "@babel/core": "^7.14.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/preset-env": "^7.14.0",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
