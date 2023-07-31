@@ -376,7 +376,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
       float: 'right',
       position: 'sticky',
       right: 0,
-      width: addActionWidth
+      width: addActionWidth,
+      textAlign: 'right',
     } as React.CSSProperties;
 
     let createActionRow = null;
