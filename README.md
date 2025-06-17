@@ -22,7 +22,7 @@ To use tabletable:
 tabletable has the following component props:
 
 #### Required
-**data [Immutable.Seq]** - structured source data.
+**data [Seq]** - structured source data.
 
 **columns [object[]]** - array of column definition objects.
 
@@ -133,4 +133,3 @@ Issues are tracked in [Github Issues](https://github.com/ZeroarcSoftware/tableta
 
 ## Changes
 Changes are tracked as [Github Releases](https://github.com/ZeroarcSoftware/tabletable/releases)
-

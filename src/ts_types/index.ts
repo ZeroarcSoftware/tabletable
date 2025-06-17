@@ -1,11 +1,11 @@
 // Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import * as Immutable from 'immutable';
+import { List, Map } from 'immutable';
 
-export type Data = Immutable.List<Immutable.Map<string, any>>;
+export type Data = List<Map<string, any>>;
 
-export type Row = Immutable.Map<string, any>;
+export type Row = Map<string, any>;
 
 export type Context = any;
 
