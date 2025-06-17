@@ -416,7 +416,7 @@ module.exports = camelizeStyleName;
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * 
+ *
  */
 
 var isTextNode = __webpack_require__(/*! ./isTextNode */ "./node_modules/fbjs/lib/isTextNode.js");
@@ -464,7 +464,7 @@ module.exports = containsNode;
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * 
+ *
  */
 
 function makeEmptyFunction(arg) {
@@ -803,7 +803,7 @@ module.exports = isTextNode;
  * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
- * 
+ *
  */
 
 /*eslint-disable no-self-compare */
@@ -1672,8 +1672,8 @@ function maybeIndexedSeqFromValue(value) {
  * This is extended further to allow Objects to describe the values they
  * represent, by way of `valueOf` or `equals` (and `hashCode`).
  *
- * Note: because of this extension, the key equality of Immutable.Map and the
- * value equality of Immutable.Set will differ from ES6 Map and Set.
+ * Note: because of this extension, the key equality of Map and the
+ * value equality of Set will differ from ES6 Map and Set.
  *
  * ### Defining custom values
  *
@@ -1685,7 +1685,7 @@ function maybeIndexedSeqFromValue(value) {
  *     var date2 = new Date(1234567890000);
  *     date1.valueOf(); // 1234567890000
  *     assert( date1 !== date2 );
- *     assert( Immutable.is( date1, date2 ) );
+ *     assert( is( date1, date2 ) );
  *
  * Note: overriding `valueOf` may have other implications if you use this object
  * where JavaScript expects a primitive, such as implicit string coercion.
@@ -2885,7 +2885,7 @@ function isPlainObj(value) {
 
 /**
  * Returns true if the value is a potentially-persistent data structure, either
- * provided by Immutable.js or a plain Array or Object.
+ * provided by js or a plain Array or Object.
  */
 function isDataStructure(value) {
   return isImmutable(value) || Array.isArray(value) || isPlainObj(value);
@@ -27103,7 +27103,7 @@ var Demo = function (_React$Component) {
   _createClass(Demo, [{
     key: 'render',
     value: function render() {
-      var immutableData = Immutable.fromJS(_fake_data2.default);
+      var immutableData = fromJS(_fake_data2.default);
 
       var columnDefs = [{
         display: 'Index',

@@ -8,7 +8,7 @@
 // External
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Immutable from 'immutable';
+
 
 // Local
 import Tabletable from './Container';
@@ -18,7 +18,7 @@ import { Row, Context, Column } from './ts_types';
 
 class Demo extends React.Component {
   render() {
-    let immutableData = Immutable.fromJS(fakeData);
+    let immutableData = fromJS(fakeData);
 
     let columnDefs:Array<Column> = [
       {

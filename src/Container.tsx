@@ -1,8 +1,8 @@
 // Tabletable - Copyright 2020 Zeroarc Software, LLC
 'use strict';
 
-import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect, useRef, useCallback, ReactComponentElement, Component, ReactNode } from 'react';
-import Immutable from 'immutable';
+import React, { useState, ReactElement, SyntheticEvent, FunctionComponent, useEffect, useRef, useCallback, ReactNode } from 'react';
+import { fromJS, isImmutable } from 'immutable';
 import ClassNames from 'classnames';
 // Fonts
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,7 +26,7 @@ import { Data, Column, Row, Context, SortDirection, TableMode, SortCriteria, Row
 
 type Props = {
   columns: Array<Column>,
-  children: ReactNode, 
+  children: ReactNode,
   data: Data,
   pagerSize: number,
   rowsPerPage: number,
@@ -222,19 +222,19 @@ const TabletableContainer: FunctionComponent<Props> = ({
 
   //#endregion
 
-  if (!Immutable.isImmutable(data)) {
+  if (!isImmutable(data)) {
     console.error('Invalid prop data supplied to TableTable. Expected Immutable iterable.');
     return (<div>INVALID DATA</div>);
   }
 
-  let headerComponents: JSX.Element[] = [];
+  let headerComponents: React.JSX.Element[] = [];
 
   const colSize = columns.length;
 
   columns.forEach((col, i) => {
     // If visible is false, hide the column. If visible is not defined, default to showing column.
     if (typeof col.visible === 'undefined' || col.visible) {
-      let sortIcon: JSX.Element | null = null;
+      let sortIcon: React.JSX.Element | null = null;
       // Add icon/action if column is sortable.
       if (col.sortable) {
         if (sortCriteria !== undefined && sortCriteria.key === col.key) {
@@ -265,7 +265,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   const rows = data.skip(skipRows).take(takeRows).map((row, index) => {
     // Create row context if required. Make it an immutable so nobody tries to abuse it by shoving stuff into it
     // during a column step. We will re-project from the Immutable each time it is used
-    const context = Immutable.fromJS(rowContext ? rowContext(row, index) : {}) as any;
+    const context = fromJS(rowContext ? rowContext(row, index) : {}) as any;
     const error = rowContext ? rowContext(row, index)?.error : null;
 
     let _rowCssClass = '';
@@ -287,7 +287,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     }
 
     // Build out components for the row
-    let rowComponents: JSX.Element[] = [];
+    let rowComponents: React.JSX.Element[] = [];
     columns.forEach((col, i) => {
       // If visible is false or undefined, don't show the column
       if (col.visible === false) return;
@@ -340,8 +340,8 @@ const TabletableContainer: FunctionComponent<Props> = ({
     );
   });
 
-  let createRow: JSX.Element | null = null;
-  let errorMsg: JSX.Element | null = null;
+  let createRow: React.JSX.Element | null = null;
+  let errorMsg: React.JSX.Element | null = null;
 
   if (mode === 'create') {
     let _rowCssClass = '';
@@ -350,7 +350,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
     }
 
     // Build out components for the row
-    let rowComponents: JSX.Element[] = [];
+    let rowComponents: React.JSX.Element[] = [];
     columns.forEach((col, i) => {
       // If visible is false or undefined, don't show the column
       if (col.visible === false) return;
@@ -432,7 +432,7 @@ const TabletableContainer: FunctionComponent<Props> = ({
   // Setup pager. If totalRows has been populated, use that, otherwise count passed in data
   totalRows = totalRows ? totalRows : data.size;
 
-  const totalPages: number = Math.ceil(totalRows / rowsPerPage);
+  const totalPages: number = totalRows ? Math.ceil(totalRows / rowsPerPage) : 0;
 
   let pager: null | ReactElement<{ currentPage: number, displayPages: number, maxPage: number, onPageChange: (pageNumber: number) => void }> = null;
 
